@@ -1,0 +1,25 @@
+
+c = [-750 -1000];
+G = [
+	1 1;
+	1 2;
+	4 3;
+    ];
+h = [10 15 25]';
+A = [
+	0.5 1
+];
+b=[7.5];
+l = [3];
+q = [];
+e = []
+dims=[3,0,0]
+[x,y,s,z,info,status] =ecos(c,G,h,dims,A,b);
+//  !--error 10000 
+// ecos: Expected type ["list"] for input argument dims at input #4, but got "constant" instead.
+// at line      56 of function Checktype called by :  
+// at line     155 of function ecos called by :  
+// [x,y,s,z,info,status] =ecos(c,G,h,dims,A,b);
+// at line      17 of exec file called by :    
+// exec ecos_dims1.sce
+ 
