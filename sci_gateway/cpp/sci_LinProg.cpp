@@ -129,6 +129,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* o
 		return 1;      
 	}
 
+
 	OsiSolverInterface* si = new OsiClpSolverInterface();
    //Defining the constraint matrix
    CoinPackedMatrix *matrix =  new CoinPackedMatrix(false , 0 , 0);

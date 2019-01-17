@@ -12,6 +12,7 @@
 
 
 using namespace std;
+/*
 int getFunctionFromScilab(int argNum, int **dest)
 {	
 	//data declarations
@@ -37,87 +38,64 @@ int getFunctionFromScilab(int argNum, int **dest)
 	return 0;
 	
 }
-
-int getDoubleFromScilab(int argNum, double *dest)
+*/
+int getDoubleFromScilab(scilabEnv env, scilabVar* in,int argNum, double *dest)
 {
 	//data declarations
-	SciErr sciErr;
-	int iRet,*varAddress;
 	const char errMsg[]="Wrong type for input argument #%d: A double is expected.\n";
 	const int errNum=999;
-	//get variable address
-	sciErr = getVarAddressFromPosition(pvApiCtx, argNum, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		return 1;
-	}
+
+
+
 	//check that it is a non-complex double
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	if ( !scilab_isDouble(env,in[argNum]) ||  scilab_isComplex(env,in[argNum]) )
 	{
 		Scierror(errNum,errMsg,argNum);
 		return 1;
 	}
 	//retrieve and store
-	iRet = getScalarDouble(pvApiCtx, varAddress, dest);
-	if(iRet)
-	{
-		Scierror(errNum,errMsg,argNum);
-		return 1;
-	}
+	scilab_getDouble(env, in[argNum], &dest);
 	return 0;
 }
 
-int getUIntFromScilab(int argNum, int *dest)
+int getUIntFromScilab(scilabEnv env, scilabVar* in, int argNum, int *dest)
 {
-	SciErr sciErr;
-	int iRet,*varAddress;
-	double inputDouble;
+	
+	double* inputDouble;
 	const char errMsg[]="Wrong type for input argument #%d: A nonnegative integer is expected.\n";
 	const int errNum=999;
 	//same steps as above
-	sciErr = getVarAddressFromPosition(pvApiCtx, argNum, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	
+	if ( !scilab_is(env,in[argNum]) ||  scilab_isComplex(env,in[argNum]) )
 	{
 		Scierror(errNum,errMsg,argNum);
 		return 1;
 	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
+	scilab_getDouble(env,in[argNum], &inputDouble);
 	//check that an unsigned int is stored in the double by casting and recasting
-	if(iRet || ((double)((unsigned int)inputDouble))!=inputDouble)
+	if(((double *)((unsigned int *)inputDouble))!=inputDouble)
 	{
 		Scierror(errNum,errMsg,argNum);
 		return 1;
 	}
-	*dest=(unsigned int)inputDouble;
+	dest=(unsigned int *) inputDouble;
 	return 0;
 }
 
-int getIntFromScilab(int argNum, int *dest)
+int getIntFromScilab(scilabEnv env, scilabVar* in, int argNum, int *dest)
 {
-	SciErr sciErr;
-	int iRet,*varAddress;
+
 	double inputDouble;
 	const char errMsg[]="Wrong type for input argument #%d: An integer is expected.\n";
 	const int errNum=999;
 	//same steps as above
-	sciErr = getVarAddressFromPosition(pvApiCtx, argNum, &varAddress);
-	if (sciErr.iErr)
-	{
-		printError(&sciErr, 0);
-		return 1;
-	}
-	if ( !isDoubleType(pvApiCtx,varAddress) ||  isVarComplex(pvApiCtx,varAddress) )
+	
+	if ( !scilab_IsDouble(env, in[argNum]) ||  scilab_isComplex(env,in[argNum]) )
 	{
 		Scierror(errNum,errMsg,argNum);
 		return 1;
 	}
-	iRet = getScalarDouble(pvApiCtx, varAddress, &inputDouble);
+	scialb_getDouble(env, in, &inputDouble);
 	//check that an int is stored in the double by casting and recasting
 	if(iRet || ((double)((int)inputDouble))!=inputDouble)
 	{
@@ -127,7 +105,7 @@ int getIntFromScilab(int argNum, int *dest)
 	*dest=(int)inputDouble;
 	return 0;
 }
-
+/*
 int getFixedSizeDoubleMatrixFromScilab(int argNum, int rows, int cols, double **dest)
 {
 	int *varAddress,inputMatrixRows,inputMatrixCols;
@@ -162,6 +140,7 @@ int getFixedSizeDoubleMatrixFromScilab(int argNum, int rows, int cols, double **
 	return 0;
 }
 
+*/
 int getDoubleMatrixFromScilab(int argNum, int *rows, int *cols, double **dest)
 {
 	int *varAddress;
@@ -233,7 +212,7 @@ int getStringFromScilab(int argNum,char **dest)
 	getAllocatedSingleString(pvApiCtx, varAddress, dest);
     
 }
-
+/*
 bool getFunctionFromScilab1(int n,char name[], double *x,int posFirstElementOnStackForSF,int nOfRhsOnSF,int nOfLhsOnSF, double **dest)
 {	
 	double check;
@@ -288,7 +267,7 @@ bool getHessFromScilab(int n,int numConstr_,char name[], double *x,double *obj,d
 	}	
 	return 0;
 }
-
+*/
 int getIntMatrixFromScilab(int argNum, int *rows, int *cols, int **dest)
 {
 	int *varAddress;
