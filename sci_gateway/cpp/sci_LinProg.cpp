@@ -9,6 +9,12 @@
 // Organization: FOSSEE, IIT Bombay
 // Email: toolbox@scilab.in
 
+#include <api_scilab.h>
+#include <Scierror.h>
+#include <localization.h>
+#include <sciprint.h>
+
+
 #include "sci_iofunc.hpp"
 #include"OsiSolverInterface.hpp"
 #include "OsiClpSolverInterface.hpp"
@@ -16,11 +22,6 @@
 #include "CoinPackedVector.hpp"
 
 extern "C"{
-#include <api_scilab.h>
-#include <Scierror.h>
-#include <localization.h>
-#include <sciprint.h>
-
 //Solver function
 static const char fname[] = "linearprog";
 /* ==================================================================== */
@@ -62,13 +63,13 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* o
 	////////// Manage the input argument //////////
 	
 	//Number of Variables
-	if(getIntFromScilab(1,&nVars))
+	if(getIntFromScilab(env, in, 1,&nVars))
 	{
 		return 1;
 	}
 
 	//Number of Constraints
-	if (getIntFromScilab(2,&nCons))
+	if (getIntFromScilab(env, in, 2,&nCons))
 	{
 		return 1;
 	}
@@ -76,7 +77,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* o
 	//Objective function from Scilab
 	temp1 = nVars;
 	temp2 = nCons;
-	if (getFixedSizeDoubleMatrixFromScilab(3,1,temp1,&obj))
+	if (getDoubleMatrixFromScilab(env, in,3,obj))
 	{
 		return 1;
 	}
@@ -87,7 +88,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* o
 		temp1 = nCons;
 		temp2 = nVars;
 
-		if (getFixedSizeDoubleMatrixFromScilab(4,temp1,temp2,&conMatrix))
+		if (getDoubleMatrixFromScilab(env, in,4,conMatrix))
 		{
 			return 1;
 		}
@@ -95,13 +96,13 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* o
 		//conLB matrix from scilab
 		temp1 = nCons;
 		temp2 = 1;
-		if (getFixedSizeDoubleMatrixFromScilab(5,temp1,temp2,&conlb))
+		if (getDoubleMatrixFromScilab(env, in, 5,conlb))
 		{
 			return 1;
 		}
 
 		//conUB matrix from scilab
-		if (getFixedSizeDoubleMatrixFromScilab(6,temp1,temp2,&conub))
+		if (getDoubleMatrixFromScilab(env, in, 6,conub))
 		{
 			return 1;
 		}
@@ -111,20 +112,20 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* o
 	//lb matrix from scilab
 	temp1 = 1;
 	temp2 = nVars;
-	if (getFixedSizeDoubleMatrixFromScilab(7,temp1,temp2,&lb))
+	if (getDoubleMatrixFromScilab(env, in, 7, lb))
 	{
 		return 1;
 	}
 
 
 	//ub matrix from scilab
-	if (getFixedSizeDoubleMatrixFromScilab(8,temp1,temp2,&ub))
+	if (getDoubleMatrixFromScilab(env, in, 8,ub))
 	{
 		return 1;
 	}
 
 	//get options from scilab
-	if(getFixedSizeDoubleMatrixInList(9 , 2 , 1 , 1 , &options))
+	if(getDoubleMatrixFromScilab(env, in, 9, options))
 	{
 		return 1;      
 	}
@@ -184,12 +185,12 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* o
 	//get dual vector
 	const double* dual = si->getRowPrice();
 
-	returnDoubleMatrixToScilab(1 , 1 , nVars , xValue);
-	returnDoubleMatrixToScilab(2 , 1 , 1 , &objValue);
-	returnDoubleMatrixToScilab(3 , 1 , 1 , &status_);
-	returnDoubleMatrixToScilab(4 , 1 , 1 , &iterations);
-	returnDoubleMatrixToScilab(5 , 1 , nVars , Zl);
-	returnDoubleMatrixToScilab(6 , 1 , nCons , dual);
+	returnDoubleMatrixToScilab(env, out,1 , 1 , nVars , xValue);
+	returnDoubleMatrixToScilab(env, out,2 , 1 , 1 , &objValue);
+	returnDoubleMatrixToScilab(env, out, 3 , 1 , 1 , &status_);
+	returnDoubleMatrixToScilab(env, out, 4 , 1 , 1 , &iterations);
+	returnDoubleMatrixToScilab(env, out,5 , 1 , nVars , Zl);
+	returnDoubleMatrixToScilab(env,out,6 , 1 , nCons , dual);
 	
 	}
 }
