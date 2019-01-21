@@ -9,17 +9,18 @@
 // Organization: FOSSEE, IIT Bombay
 // Email: toolbox@scilab.in
 
-#include "sci_iofunc.hpp"
-#include "OsiClpSolverInterface.hpp"
 
-extern "C"{
+
 #include <api_scilab.h>
 #include <Scierror.h>
 #include <localization.h>
 #include <sciprint.h>
 #include <iostream>
+#include "sci_iofunc.hpp"
+#include "OsiClpSolverInterface.hpp"
+#include <stdlib.h>
 
-
+extern "C"{
 static const char fname[] = "rmps";
 //Solver function
 int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, int nout, scilabVar* out) 
@@ -29,7 +30,7 @@ int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, in
     OsiSolverInterface* si = new OsiClpSolverInterface();
 
 	//data declaration
-	char* ptr;                             	     //pointer to point to address of the filename
+	wchar_t* ptr1;                             	     //pointer to point to address of the filename
     	double* options_;                            //options to set maximum iterations 
 	
     	if (nin != 2);          //Check we have exactly two arguments as input or not
@@ -48,12 +49,13 @@ int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, in
     //Getting the input arguments from Scilab
     //Getting the MPS file path
 	//Reading mps file
-	getStringFromScilab(1,&ptr);
-
+	getStringFromScilab( env, in, 1,&ptr1);
+	
+	char *ptr = reinterpret_cast<char*>(ptr1);
  	std::cout<<ptr;
 	
     //get options from Scilab
-    if(getFixedSizeDoubleMatrixInList(2 , 2 , 1 , 1 , &options_))
+    if(getDoubleMatrixFromScilab(env,  in,2, options_))
 	{
 		return 1;
 	}
@@ -110,12 +112,12 @@ int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, in
     //get dual vector //const r	
     const double* dual = si->getRowPrice();
   
-    returnDoubleMatrixToScilab(1 , 1 , numVars_ , xValue);
-    returnDoubleMatrixToScilab(2 , 1 , 1 , &objValue);
-    returnDoubleMatrixToScilab(3 , 1 , 1 , &status);
-    returnDoubleMatrixToScilab(4 , 1 , 1 , &iterations);
-    returnDoubleMatrixToScilab(5 , 1 , numVars_ , reducedCost);
-    returnDoubleMatrixToScilab(6 , 1 , numCons_ , dual);
+    returnDoubleMatrixToScilab(env, out,1 , 1 , numVars_ , xValue);
+    returnDoubleMatrixToScilab(env, out,2 , 1 , 1 , &objValue);
+    returnDoubleMatrixToScilab(env, out, 3 , 1 , 1 , &status);
+    returnDoubleMatrixToScilab(env, out, 4 , 1 , 1 , &iterations);
+    returnDoubleMatrixToScilab(env, out,5 , 1 , numVars_ , reducedCost);
+    returnDoubleMatrixToScilab(env,out,6 , 1 , numCons_ , dual);
 	
 	free((double *)xValue);
 	free((double *)dual);

@@ -274,7 +274,7 @@ int return0toScilab(scilabEnv env, scilabVar* out, int argNum)
 	return 0;
 }
 
-int returnDoubileToScilab(scilabEnv env, scilabVar* out, int argNum, double retVal)
+int returnDoubleToScilab(scilabEnv env, scilabVar* out, int argNum, double retVal)
 {
 	out[argNum] = scilab_createDouble(env,retVal);
 	return 0;
