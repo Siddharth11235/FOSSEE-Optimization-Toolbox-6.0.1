@@ -7,8 +7,8 @@ mode(-1);
 lines(0);
 
 function main_builder()
-    TOOLBOX_NAME  = "toolbox_skeleton";
-    TOOLBOX_TITLE = "Toolbox Skeleton";
+    TOOLBOX_NAME  = "FOSSEE_Optimization_Toolbox";
+    TOOLBOX_TITLE = "FOSSEE Optimization Toolbox";
     toolbox_dir   = get_absolute_file_path("builder.sce");
 
     // Check Scilab's version
@@ -17,12 +17,12 @@ function main_builder()
     try
         v = getversion("scilab");
     catch
-        error(gettext("Scilab 5.3 or more is required."));
+        error(gettext("Scilab 6.0 or more is required."));
     end
 
-    if v(1) < 5 & v(2) < 3 then
+    if v(1) < 6 & v(2) < 0 then
         // new API in scilab 5.3
-        error(gettext("Scilab 5.3 or more is required."));
+        error(gettext("Scilab 6.0 or more is required."));
     end
 
     // Check modules_manager module availability
