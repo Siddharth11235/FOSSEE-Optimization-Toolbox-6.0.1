@@ -1,5 +1,4 @@
 // Copyright (C) 2015 - IIT Bombay - FOSSEE
-//
 // Author: Guru Pradeep Reddy, Bhanu Priya Sayal
 // Organization: FOSSEE, IIT Bombay
 // Email: gurupradeept@gmail.com, bhanupriyasayal@gmail.com
@@ -196,8 +195,10 @@ function [xopt,fopt,exitflag,output,lambda] = matrix_linprog (varargin)
 	nbCon = size(conMatrix,1);
 	conlb = [beq; repmat(-%inf,nbConInEq,1)];
 	conub = [beq;b];
+	lb = lb';
+	ub = ub';
 
-   [xopt,fopt,status,iter,Zl,dual] = linearprog(nbVar,nbCon,c,conMatrix,conlb,conub,lb',ub',options);
+   [xopt,fopt,status,iter,Zl,dual] = linearprog(nbVar,nbCon,c,conMatrix,conlb,conub,lb,  ub,options);
    
    xopt = xopt';
    exitflag = status;
