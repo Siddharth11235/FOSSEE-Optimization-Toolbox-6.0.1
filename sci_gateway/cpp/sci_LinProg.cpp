@@ -8,20 +8,17 @@
 // Author: Guru Pradeep Reddy Bhanu Priya Sayal
 // Organization: FOSSEE, IIT Bombay
 // Email: toolbox@scilab.in
-
-#include <api_scilab.h>
-#include <Scierror.h>
-#include <localization.h>
-#include <sciprint.h>
-
-
-#include "sci_iofunc.hpp"
 #include"OsiSolverInterface.hpp"
 #include "OsiClpSolverInterface.hpp"
 #include "CoinPackedMatrix.hpp"
 #include "CoinPackedVector.hpp"
 
 extern "C"{
+
+#include <api_scilab.h>
+#include <Scierror.h>
+#include <localization.h>
+#include <sciprint.h>
 //Solver function
  const char fname[] = "linearprog";
 /* ==================================================================== */
@@ -42,22 +39,26 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 	//Upper bounds for variables
 	double* ub= NULL;
 	//options for maximum iterations and writing mps
-	double* options= NULL;
+	//double* options= NULL;
 	//Flag for Mps
-	double flagMps= NULL;
+	//double flagMps= NULL;
 	//Number of rows and columns in objective function
-	int nVars=0, nCons=0,temp1=0,temp2=0;
+	int nVars=0, nCons=0;
+
+	int inr1 = 0;
+    int inc1 = 0;
+	int size1 = 0;
 	
-	if (nin !=9) 
+	if (nin !=8) 
 	{
-        	Scierror(999, "%s: Wrong number of input arguments: %d expected.\n", fname, 9);
+        	Scierror(999, "%s: Wrong number of input arguments: %d expected.\n", fname, 8);
         	return STATUS_ERROR; 
 	}
 	
-	if (nout !=6) //Checking the output arguments
+	if (nout !=2) //Checking the output arguments
 
 	{
-		Scierror(999, "%s: Wrong number of output argument(s): %d expected.\n", fname, 6);
+		Scierror(999, "%s: Wrong number of output argument(s): %d expected.\n", fname, 2);
 		return 1;
 	}
 	////////// Manage the input argument //////////
@@ -82,23 +83,22 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 
 
 	//Objective function from Scilab
-	temp1 = nVars;
-	temp2 = nCons;
+	
 	
 	if (scilab_isDouble(env, in[2]) == 0 || scilab_isMatrix2d(env, in[2]) == 0)
     	{
         	Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 3);
        		return 1;
     	}	
-
-	
+		
+		size1 = scilab_getDim2d(env, in[2], &inr1, &inc1);	
     	scilab_getDoubleArray(env, in[2], &obj);
+		
 
 	if (nCons!=0)
 	{
 		//conMatrix matrix from scilab
-		temp1 = nCons;
-		temp2 = nVars;
+	
 		if (scilab_isDouble(env, in[3]) == 0 || scilab_isMatrix2d(env, in[3]) == 0)
     		{
         		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 4);
@@ -109,8 +109,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 
 
 		//conLB matrix from scilab
-		temp1 = nCons;
-		temp2 = 1;
+		
 		if (scilab_isDouble(env, in[4]) == 0 || scilab_isMatrix2d(env, in[4]) == 0)
     		{
         		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 5);
@@ -133,8 +132,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 	}
 
 	//lb matrix from scilab
-	temp1 = 1;
-	temp2 = nVars;
+	
 	if (scilab_isDouble(env, in[6]) == 0 || scilab_isMatrix2d(env, in[6]) == 0)
     	{
         	Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 7);
@@ -158,14 +156,13 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 
 
 	//get options from scilab
-	if (scilab_isDouble(env, in[8]) == 0 || scilab_isMatrix2d(env, in[8]) == 0)
+	/*if (scilab_isDouble(env, in[8]) == 0 || scilab_isMatrix2d(env, in[8]) == 0)
     	{
         	Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 9);
        		return 1;
     	}	
 	
-	scilab_getDoubleArray(env, in[8], &lb);
-
+	scilab_getDoubleArray(env, in[8], &lb);*/
 
 
 
@@ -183,16 +180,27 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
         matrix->appendRow(row);
    	}
 	//setting options for maximum iterations
-    si->setIntParam(OsiMaxNumIteration,options[0]);
+    si->setIntParam(OsiMaxNumIteration,1500);
 
     //Load the problem to OSI
     si->loadProblem(*matrix , lb , ub, obj , conLB , conUB);
 
     //Solve the problem
     si->initialSolve();
+	
 	//Output the solution to Scilab
 	//get solution for x
-	const double* xValue = si->getColSolution();
+		
+
+	const double* xValue;
+	out[0] = scilab_createDoubleMatrix2d(env, nVars, 1, 0);
+	scilab_getDoubleArray(env, out[0], &xValue);
+	
+
+
+	xValue = si->getColSolution();
+	sciprint("%f\n", xValue[0]);
+	sciprint("%f\n", xValue[1]);
 	
 	//get objective value
 	double objValue = si->getObjValue();
@@ -222,13 +230,23 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 	
 	//get dual vector
 	const double* dual = si->getRowPrice();
+	
 
-	out[0] = scilab_createDoubleMatrix(env, 1 , nVars , xValue);
+	
+	
+	//scilab_getDoubleArray(env, out[0], &xValue);
+
+
+
+	
+
 	out[1] = scilab_createDouble(env, objValue);
-	out[2] = scilab_createDouble(env, status_);
+	/*out[2] = scilab_createDouble(env, status_);
 	out[3] = scilab_createDouble(env, iterations);
-	out[4] = scilab_createDoubleMatrix(env, 1 , nVars , Zl);
-	out[5] = scilab_createDoubleMatrix(env, 1 , nCons , dual);
+	out[4] = scilab_createDoubleMatrix(env, 1 , nVars , 0);
+	out[5] = scilab_createDoubleMatrix(env, 1 , nCons , 0);*/
+	
+
 
 	return 0;	
 

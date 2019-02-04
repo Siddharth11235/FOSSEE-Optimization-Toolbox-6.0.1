@@ -23,8 +23,8 @@ if getos()=="Windows" then
 Function_Names = [
         
         //Linprog function
-        "linearprog","sci_linearprog";
-        "rmps","sci_rmps";
+        "linearprog","sci_linearprog", "csci6";
+      //  "rmps","sci_rmps";
 
         
 
@@ -37,7 +37,7 @@ Files = [
 
         //CLP
         "sci_LinProg.cpp",
-        "read_mps.cpp"
+       // "read_mps.cpp"
         
     
     ]
@@ -47,21 +47,19 @@ Function_Names = [
         
         
         //Linprog function
-        "linearprog","sci_linearprog";
-        "rmps","sci_rmps";
-
-        
+        "linearprog","sci_linearprog", "csci6";
+       // "rmps","sci_rmps","csci6";      
     ];
 
 //Name of all the files to be compiled
 Files = [
-        "sci_iofunc.cpp",
+       // "sci_iofunc.cpp",
 
        
 
         //CLP
         "sci_LinProg.cpp",
-        "read_mps.cpp"
+       // "read_mps.cpp"
         
         
         
