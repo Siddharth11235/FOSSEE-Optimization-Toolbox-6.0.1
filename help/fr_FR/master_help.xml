@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book [
+<!--Begin Entities-->
+<!ENTITY afc48f5e5626338f16d93e510f2aa74e1 SYSTEM "/home/siddharth/FOT6/help/fr_FR/c_multiplybypi.xml">
+<!ENTITY af24e580b7ef8cdb3df8fa54dbaef32a1 SYSTEM "/home/siddharth/FOT6/help/fr_FR/c_sub.xml">
+<!ENTITY a49f390d4f9ccfae5d7aaf94cd14d06ea SYSTEM "/home/siddharth/FOT6/help/fr_FR/c_sum.xml">
+<!ENTITY adec2651887dd555da43ee957b0dcd0d7 SYSTEM "/home/siddharth/FOT6/help/fr_FR/fortran_sum.xml">
+<!ENTITY a7325444ca6ec60be8e39349468732c3a SYSTEM "/home/siddharth/FOT6/help/en_US/linprog.xml">
+<!ENTITY a85a0aa7d3f26bdfb4b3800d9ef5acc5b SYSTEM "/home/siddharth/FOT6/help/fr_FR/scilab_sum.xml">
+<!--End Entities-->
+]>
+<book version="5.0-subset Scilab" xml:lang="fr_FR"
+      xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:mml="http://www.w3.org/1998/Math/MathML"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:db="http://docbook.org/ns/docbook">
+  <info xml:id='fossee_optimization_toolbox_manual'>
+    <title>FOSSEE Optimization Toolbox</title>
+  </info>
+
+<part xml:id='section_6be4c2e640c776fa05914d27afdab5f3'>
+<title>FOSSEE Optimization Toolbox</title>
+&afc48f5e5626338f16d93e510f2aa74e1;
+&af24e580b7ef8cdb3df8fa54dbaef32a1;
+&a49f390d4f9ccfae5d7aaf94cd14d06ea;
+&adec2651887dd555da43ee957b0dcd0d7;
+&a7325444ca6ec60be8e39349468732c3a;
+&a85a0aa7d3f26bdfb4b3800d9ef5acc5b;
+</part>
+</book>

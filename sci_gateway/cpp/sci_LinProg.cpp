@@ -24,8 +24,7 @@ extern "C"{
 /* ==================================================================== */
 int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, int nout, scilabVar* out) 
 {
-	sciprint("no. of inputs: %d\n", nin);
-	sciprint("no. of outputs: %d\n",nout);
+
 	//Objective function
 	double* obj = NULL;  
 	//Constraint matrix coefficients
@@ -55,10 +54,10 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
         	return STATUS_ERROR; 
 	}
 	
-	if (nout !=2) //Checking the output arguments
+	if (nout !=6) //Checking the output arguments
 
 	{
-		Scierror(999, "%s: Wrong number of output argument(s): %d expected.\n", fname, 2);
+		Scierror(999, "%s: Wrong number of output argument(s): %d expected.\n", fname, 6);
 		return 1;
 	}
 	////////// Manage the input argument //////////
@@ -93,7 +92,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 		
 		size1 = scilab_getDim2d(env, in[2], &inr1, &inc1);	
     	scilab_getDoubleArray(env, in[2], &obj);
-		
+
 
 	if (nCons!=0)
 	{
@@ -156,13 +155,13 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 
 
 	//get options from scilab
-	/*if (scilab_isDouble(env, in[8]) == 0 || scilab_isMatrix2d(env, in[8]) == 0)
+	if (scilab_isDouble(env, in[8]) == 0 || scilab_isMatrix2d(env, in[8]) == 0)
     	{
         	Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 9);
        		return 1;
     	}	
 	
-	scilab_getDoubleArray(env, in[8], &lb);*/
+	scilab_getDoubleArray(env, in[8], &lb);
 
 
 
@@ -190,17 +189,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 	
 	//Output the solution to Scilab
 	//get solution for x
-		
-
-	const double* xValue;
-	out[0] = scilab_createDoubleMatrix2d(env, nVars, 1, 0);
-	scilab_getDoubleArray(env, out[0], &xValue);
-	
-
-
-	xValue = si->getColSolution();
-	sciprint("%f\n", xValue[0]);
-	sciprint("%f\n", xValue[1]);
+	const double* xValue = si->getColSolution();
 	
 	//get objective value
 	double objValue = si->getObjValue();
@@ -233,18 +222,19 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 	
 
 	
+	//Create Output matrices
+	out[0] = scilab_createDoubleMatrix2d(env, nVars, 1, 0);
+	out[4] = scilab_createDoubleMatrix2d(env, nVars, 1, 0);
+	out[5] = scilab_createDoubleMatrix2d(env, nCons, 1, 0);
+
+
 	
-	//scilab_getDoubleArray(env, out[0], &xValue);
-
-
-
-	
-
+	scilab_setDoubleArray(env, out[0], xValue);
 	out[1] = scilab_createDouble(env, objValue);
-	/*out[2] = scilab_createDouble(env, status_);
+	out[2] = scilab_createDouble(env, status_);
 	out[3] = scilab_createDouble(env, iterations);
-	out[4] = scilab_createDoubleMatrix(env, 1 , nVars , 0);
-	out[5] = scilab_createDoubleMatrix(env, 1 , nCons , 0);*/
+	scilab_setDoubleArray(env, out[4], Zl);
+	scilab_setDoubleArray(env, out[5], dual);
 	
 
 

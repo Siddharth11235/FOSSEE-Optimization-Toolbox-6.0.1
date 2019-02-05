@@ -31,9 +31,9 @@ int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, in
 
 	//data declaration
 	wchar_t* ptr1;                             	     //pointer to point to address of the filename
-    	double* options_;                            //options to set maximum iterations 
+    double* options_;                            	 //options to set maximum iterations 
 	
-    	if (nin != 2);          //Check we have exactly two arguments as input or not
+    	if (nin != 2);          					 //Check we have exactly two arguments as input or not
 	{
 		Scierror(77, "%s: Wrong number of input argument(s): %d expected.\n", fname, 2);
         	return 1;
@@ -63,6 +63,8 @@ int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, in
 
     //Read the MPS file
     si->readMps(ptr);
+
+
 
     //setting options for maximum iterations
     si->setIntParam(OsiMaxNumIteration,options_[0]);
@@ -112,15 +114,20 @@ int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, in
     //get dual vector //const r	
     const double* dual = si->getRowPrice();
   
-    returnDoubleMatrixToScilab(env, out,1 , 1 , numVars_ , xValue);
-    returnDoubleMatrixToScilab(env, out,2 , 1 , 1 , &objValue);
-    returnDoubleMatrixToScilab(env, out, 3 , 1 , 1 , &status);
-    returnDoubleMatrixToScilab(env, out, 4 , 1 , 1 , &iterations);
-    returnDoubleMatrixToScilab(env, out,5 , 1 , numVars_ , reducedCost);
-    returnDoubleMatrixToScilab(env,out,6 , 1 , numCons_ , dual);
+    //Create Output matrices
+	out[0] = scilab_createDoubleMatrix2d(env, nVars, 1, 0);
+	out[4] = scilab_createDoubleMatrix2d(env, nVars, 1, 0);
+	out[5] = scilab_createDoubleMatrix2d(env, nCons, 1, 0);
+
+
 	
-	free((double *)xValue);
-	free((double *)dual);
-	free((double *)reducedCost);
+	scilab_setDoubleArray(env, out[0], xValue);
+	out[1] = scilab_createDouble(env, objValue);
+	out[2] = scilab_createDouble(env, status_);
+	out[3] = scilab_createDouble(env, iterations);
+	scilab_setDoubleArray(env, out[4], Zl);
+	scilab_setDoubleArray(env, out[5], dual);
+
+	return 0;	
   }
 }

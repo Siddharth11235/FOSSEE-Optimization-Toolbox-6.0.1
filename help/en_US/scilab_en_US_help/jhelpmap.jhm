@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN" "http://java.sun.com/products/javahelp/map_1_0.dtd">
+<map version="1.0">
+<mapID target="index" url="index.html"/>
+<mapID target="section_abc61e3f7ef76b2c006c716c522279db" url="section_abc61e3f7ef76b2c006c716c522279db.html"/>
+<mapID target="c_multiplybypi" url="c_multiplybypi.html"/>
+<mapID target="c_sub" url="c_sub.html"/>
+<mapID target="c_sum" url="c_sum.html"/>
+<mapID target="fortran_sum" url="fortran_sum.html"/>
+<mapID target="linprog" url="linprog.html"/>
+<mapID target="scilab_sum" url="scilab_sum.html"/>
+</map>
