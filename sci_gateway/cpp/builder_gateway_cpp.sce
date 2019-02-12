@@ -24,7 +24,7 @@ Function_Names = [
         
         //Linprog function
         "linearprog","sci_linearprog", "csci6";
-      //  "rmps","sci_rmps";
+        "rmps","sci_rmps", "csci6";
 
         
 
@@ -32,12 +32,12 @@ Function_Names = [
 
 //Name of all the files to be compiled
 Files = [
-        "sci_iofunc.cpp",
+        //"sci_iofunc.cpp",
 
 
         //CLP
         "sci_LinProg.cpp",
-       // "read_mps.cpp"
+        "read_mps.cpp"
         
     
     ]
@@ -48,7 +48,7 @@ Function_Names = [
         
         //Linprog function
         "linearprog","sci_linearprog", "csci6";
-       // "rmps","sci_rmps","csci6";      
+        "rmps","sci_rmps","csci6";      
     ];
 
 //Name of all the files to be compiled
@@ -59,9 +59,7 @@ Files = [
 
         //CLP
         "sci_LinProg.cpp",
-       // "read_mps.cpp"
-        
-        
+        "read_mps.cpp"
         
     ]
 

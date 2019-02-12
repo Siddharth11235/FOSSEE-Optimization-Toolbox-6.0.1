@@ -11,63 +11,91 @@
 
 
 
+
+#include <iostream>
+#include "OsiClpSolverInterface.hpp"
+#include"OsiSolverInterface.hpp"
+
+extern "C"{
 #include <api_scilab.h>
 #include <Scierror.h>
 #include <localization.h>
 #include <sciprint.h>
-#include <iostream>
-#include "sci_iofunc.hpp"
-#include "OsiClpSolverInterface.hpp"
 #include <stdlib.h>
 
-extern "C"{
-static const char fname[] = "rmps";
+
+const char fname[] = "rmps";
 //Solver function
-int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, int nout, scilabVar* out) 
+int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, int nout, scilabVar* out) 
 {
-    //creating a problem pointer using base class of OsiSolverInterface and
+ 
+
+	//data declaration
+	wchar_t* ptr1;                	//pointer to point to address of the filename
+    double* options_;     
+	int nIters = 0;              	//options to set maximum iterations 
+	scilabVar in2 = NULL;
+
+
+
+
+
+   if (nin !=2) 
+	{
+        	Scierror(999, "%s: Wrong number of input arguments: %d expected.\n", fname, 2);
+        	return STATUS_ERROR; 
+	}
+	
+	if (nout !=6) //Checking the output arguments
+
+	{
+		Scierror(999, "%s: Wrong number of output argument(s): %d expected.\n", fname, 6);
+		return 1;
+	}
+	////////// Manage the input argument //////////
+    //Getting the MPS file path
+	//Reading mps file
+	if (scilab_isString(env, in[0]) == 0 || scilab_isScalar(env, in[0]) == 0)
+	{
+    	Scierror(999, "%s: Wrong type for input argument #%d: An int expected.\n", fname, 1);
+    	return 1;
+	}
+
+    scilab_getString(env, in[0], &ptr1);
+	
+	
+	int i = 0;
+
+	char filename[32];
+	int ret = wcstombs ( filename, ptr1, sizeof(filename) );
+
+
+	
+	
+    //get options from scilab
+
+    if (scilab_isList(env, in[1]) == 0)
+    {
+        Scierror(999, "%s: Wrong type for input argument #%d: A list expected.\n", fname, 2);
+        return 1;
+    }
+	in2 = scilab_getListItem( env, in[1], 1);
+
+	scilab_getInteger32(env, in2, &nIters);
+
+
+
+	//creating a problem pointer using base class of OsiSolverInterface and
     //instantiate the object using derived class of ClpSolverInterface
     OsiSolverInterface* si = new OsiClpSolverInterface();
 
-	//data declaration
-	wchar_t* ptr1;                             	     //pointer to point to address of the filename
-    double* options_;                            	 //options to set maximum iterations 
-	
-    	if (nin != 2);          					 //Check we have exactly two arguments as input or not
-	{
-		Scierror(77, "%s: Wrong number of input argument(s): %d expected.\n", fname, 2);
-        	return 1;
-
-	} 
-	if (nout != 6);          //Check we have exactly sxi parameters as output or not
-        {
-		Scierror(77, "%s: Wrong number of output argument(s): %d expected.\n", fname, 6);
-                return 1;
- 
-        }
-         
-    //Getting the input arguments from Scilab
-    //Getting the MPS file path
-	//Reading mps file
-	getStringFromScilab( env, in, 1,&ptr1);
-	
-	char *ptr = reinterpret_cast<char*>(ptr1);
- 	std::cout<<ptr;
-	
-    //get options from Scilab
-    if(getDoubleMatrixFromScilab(env,  in,2, options_))
-	{
-		return 1;
-	}
-    printf("%f",options_);
-
     //Read the MPS file
-    si->readMps(ptr);
+    si->readMps(filename);
 
 
 
     //setting options for maximum iterations
-    si->setIntParam(OsiMaxNumIteration,options_[0]);
+    si->setIntParam(OsiMaxNumIteration, nIters);
 
     //Solve the problem
     si->initialSolve();
@@ -109,21 +137,21 @@ int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt* opt, in
     double iterations = si->getIterationCount();
 
     //get reduced cost	//const r
-    const double* reducedCost = si->getReducedCost();
+    const double* Zl = si->getReducedCost();
    
     //get dual vector //const r	
     const double* dual = si->getRowPrice();
   
     //Create Output matrices
-	out[0] = scilab_createDoubleMatrix2d(env, nVars, 1, 0);
-	out[4] = scilab_createDoubleMatrix2d(env, nVars, 1, 0);
-	out[5] = scilab_createDoubleMatrix2d(env, nCons, 1, 0);
+	out[0] = scilab_createDoubleMatrix2d(env, numVars_, 1, 0);
+	out[4] = scilab_createDoubleMatrix2d(env, numVars_, 1, 0);
+	out[5] = scilab_createDoubleMatrix2d(env, numCons_, 1, 0);
 
 
 	
 	scilab_setDoubleArray(env, out[0], xValue);
 	out[1] = scilab_createDouble(env, objValue);
-	out[2] = scilab_createDouble(env, status_);
+	out[2] = scilab_createDouble(env, status);
 	out[3] = scilab_createDouble(env, iterations);
 	scilab_setDoubleArray(env, out[4], Zl);
 	scilab_setDoubleArray(env, out[5], dual);
