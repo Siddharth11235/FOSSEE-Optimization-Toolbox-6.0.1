@@ -26,7 +26,8 @@ Function_Names = [
         "linearprog","sci_linearprog", "csci6";
         "rmps","sci_rmps", "csci6";
 
-        
+		//QP function
+		"solveqp","sci_solveqp", "csci6";
 
     ];
 
@@ -34,6 +35,10 @@ Function_Names = [
 Files = [
         //"sci_iofunc.cpp",
 
+		// IPOPT
+		"sci_QuadNLP.cpp",
+		"sci_ipopt.cpp",
+		"sci_QuadNLP.cpp",
 
         //CLP
         "sci_LinProg.cpp",
@@ -48,14 +53,20 @@ Function_Names = [
         
         //Linprog function
         "linearprog","sci_linearprog", "csci6";
-        "rmps","sci_rmps","csci6";      
+        "rmps","sci_rmps","csci6";   
+
+		//QP function
+		"solveqp","sci_solveqp", "csci6";   
     ];
 
 //Name of all the files to be compiled
 Files = [
        // "sci_iofunc.cpp",
 
-       
+        // IPOPT
+		"sci_QuadNLP.cpp",
+		"sci_ipopt.cpp",
+		"sci_QuadNLP.cpp",
 
         //CLP
         "sci_LinProg.cpp",

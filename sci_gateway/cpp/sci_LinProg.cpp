@@ -98,10 +98,10 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 		//conMatrix matrix from scilab
 	
 		if (scilab_isDouble(env, in[3]) == 0 || scilab_isMatrix2d(env, in[3]) == 0)
-    		{
-        		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 4);
-       			return 1;
-    		}	
+		{
+    		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 4);
+   			return 1;
+		}	
 		
 		scilab_getDoubleArray(env, in[3], &conMatrix);
 
@@ -109,20 +109,20 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 		//conLB matrix from scilab
 		
 		if (scilab_isDouble(env, in[4]) == 0 || scilab_isMatrix2d(env, in[4]) == 0)
-    		{
-        		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 5);
-       			return 1;
-    		}	
+		{
+    		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 5);
+   			return 1;
+		}	
 		
 
 		scilab_getDoubleArray(env, in[4], &conLB);
 
 		//conUB matrix from scilab
 		if (scilab_isDouble(env, in[5]) == 0 || scilab_isMatrix2d(env, in[5]) == 0)
-    		{
-        		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 6);
-       			return 1;
-    		}	
+		{
+    		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 6);
+   			return 1;
+		}	
 		
 		scilab_getDoubleArray(env, in[5], &conUB);
 
