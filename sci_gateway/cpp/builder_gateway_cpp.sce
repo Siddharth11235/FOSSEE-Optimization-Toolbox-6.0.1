@@ -29,6 +29,9 @@ Function_Names = [
 		//QP function
 		"solveqp","sci_solveqp", "csci6";
 
+		//Unconstrained Optimization
+		"solveminuncp","sci_solveminuncp", "csci6";  
+
     ];
 
 //Name of all the files to be compiled
@@ -40,9 +43,14 @@ Files = [
 		"sci_ipopt.cpp",
 		"sci_QuadNLP.cpp",
 
+		"sci_ipoptfminunc.cpp",
+		"sci_minuncNLP.cpp",
+	//	"sci_minuncTMINLP.cpp",
+		
         //CLP
         "sci_LinProg.cpp",
         "read_mps.cpp"
+
         
     
     ]
@@ -56,7 +64,10 @@ Function_Names = [
         "rmps","sci_rmps","csci6";   
 
 		//QP function
-		"solveqp","sci_solveqp", "csci6";   
+		"solveqp","sci_solveqp", "csci6";  
+
+		//Unconstrained Optimization
+		"solveminuncp","sci_solveminuncp", "csci6";   
     ];
 
 //Name of all the files to be compiled
@@ -67,6 +78,10 @@ Files = [
 		"sci_QuadNLP.cpp",
 		"sci_ipopt.cpp",
 		"sci_QuadNLP.cpp",
+
+		"sci_ipoptfminunc.cpp",
+		"sci_minuncNLP.cpp",
+		//"sci_minuncTMINLP.cpp",
 
         //CLP
         "sci_LinProg.cpp",

@@ -374,8 +374,8 @@ function [xopt,fopt,exitflag,output,lambda] = quadprog (varargin)
 		end
 	end
 
-	[xopt,fopt,status,iter,Zl,Zu,lmbda] = solveqp(int32(nbVar),int32(nbCon),H,f,A,conLB,conUB,lb,ub,x0,options);
-   
+	[xopt,fopt,status,iter,Zl,Zu,lmbda] = solveqp(int32(nbVar), int32(nbCon),H,f,A,conLB,conUB,lb,ub,x0,options);
+  
    xopt = xopt';
    exitflag = status;
 	output = struct("Iterations"      , [], ..

@@ -172,16 +172,15 @@ int sci_solveqp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, 
 	temp2 = scilab_getListItem( env, in[10], 3);
 	
 
-	int nIters = 0,cpuTime = 0;
+	double nIters = 0,cpuTime = 0;
 
-	scilab_getInteger32(env, temp1, &nIters);
-	scilab_getInteger32(env, temp2, &cpuTime);
+	scilab_getDouble(env, temp1, &nIters);
+	scilab_getDouble(env, temp2, &cpuTime);
+
+	int maxIters = (int)nIters;
+	int cpu_time = (int)cpuTime;
 
 	
-
-	sciprint("nIters: %d\n",nIters);
-	sciprint("CpuTime: %d\n", cpuTime);
-
 	// Starting Ipopt
 
 	SmartPtr<QuadNLP> Prob = 
@@ -192,8 +191,8 @@ int sci_solveqp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, 
 	////////// Managing the parameters //////////
 
 	app->Options()->SetNumericValue("tol", 1e-7);
-	app->Options()->SetIntegerValue("max_iter", 300);
-	app->Options()->SetNumericValue("max_cpu_time", 100);
+	app->Options()->SetIntegerValue("max_iter", maxIters);
+	app->Options()->SetNumericValue("max_cpu_time", cpu_time);
 	app->Options()->SetStringValue("mu_strategy", "adaptive");
 	// Indicates whether all equality constraints are linear 
 	app->Options()->SetStringValue("jac_c_constant", "yes");
