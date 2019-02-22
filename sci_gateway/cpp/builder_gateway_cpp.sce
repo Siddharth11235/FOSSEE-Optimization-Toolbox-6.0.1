@@ -30,7 +30,14 @@ Function_Names = [
 		"solveqp","sci_solveqp", "csci6";
 
 		//Unconstrained Optimization
-		"solveminuncp","sci_solveminuncp", "csci6";  
+		//"solveminuncp","sci_solveminuncp", "csci6";  
+
+		//Integer programming functions (CBC)
+		'matintlinprog','sci_matintlinprog', 'csci6';
+		'mpsintlinprog','sci_mpsintlinprog','csci6';
+
+		//BONMIN Functions
+		'solveintqp','sci_solveintqp', 'csci6';
 
     ];
 
@@ -40,18 +47,28 @@ Files = [
 
 		// IPOPT
 		"sci_QuadNLP.cpp",
-		"sci_ipopt.cpp",
+		"sci_ipoptquadprog.cpp",
 		"sci_QuadNLP.cpp",
 
-		"sci_ipoptfminunc.cpp",
-		"sci_minuncNLP.cpp",
+		//"sci_ipoptfminunc.cpp",
+		//"sci_minuncNLP.cpp",
 	//	"sci_minuncTMINLP.cpp",
 		
         //CLP
         "sci_LinProg.cpp",
-        "read_mps.cpp"
-
-        
+        "read_mps.cpp",
+		
+		//Bonmin
+  		//'sci_minuncTMINLP.cpp',
+		//'cpp_intfminunc.cpp',
+		//'sci_minbndTMINLP.cpp',
+		//'cpp_intfminbnd.cpp',		
+		//'sci_minconTMINLP.cpp',
+		//'cpp_intfmincon.cpp',
+		'sci_intlinprog_matrixcpp.cpp',
+		'sci_QuadTMINLP.cpp',
+		'sci_intquadprog.cpp'
+		'sci_intlinprog_mpscpp.cpp'        
     
     ]
 else
@@ -67,7 +84,14 @@ Function_Names = [
 		"solveqp","sci_solveqp", "csci6";  
 
 		//Unconstrained Optimization
-		"solveminuncp","sci_solveminuncp", "csci6";   
+		//"solveminuncp","sci_solveminuncp", "csci6";   
+
+		//Integer programming functions (CBC)
+		'matintlinprog','sci_matintlinprog', 'csci6';
+		'mpsintlinprog','sci_mpsintlinprog','csci6';
+
+		//BONMIN Functions
+		'solveintqp','sci_solveintqp', 'csci6';
     ];
 
 //Name of all the files to be compiled
@@ -76,16 +100,28 @@ Files = [
 
         // IPOPT
 		"sci_QuadNLP.cpp",
-		"sci_ipopt.cpp",
+		"sci_ipoptquadprog.cpp",
 		"sci_QuadNLP.cpp",
 
-		"sci_ipoptfminunc.cpp",
-		"sci_minuncNLP.cpp",
+		//"sci_ipoptfminunc.cpp",
+		//"sci_minuncNLP.cpp",
 		//"sci_minuncTMINLP.cpp",
 
         //CLP
         "sci_LinProg.cpp",
         "read_mps.cpp"
+
+		//Bonmin
+  		//'sci_minuncTMINLP.cpp',
+		//'cpp_intfminunc.cpp',
+		//'sci_minbndTMINLP.cpp',
+		//'cpp_intfminbnd.cpp',		
+		//'sci_minconTMINLP.cpp',
+		//'cpp_intfmincon.cpp',
+		'sci_intlinprog_matrixcpp.cpp',
+		'sci_QuadTMINLP.cpp',
+		'sci_intquadprog.cpp',
+		'sci_intlinprog_mpscpp.cpp'
         
     ]
 

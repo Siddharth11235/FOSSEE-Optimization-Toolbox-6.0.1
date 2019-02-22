@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ *
+ * This help file was generated from intquadprog.sci using help_from_sci().
+ *
+ -->
+
+<refentry version="5.0-subset Scilab" xml:id="intquadprog" xml:lang="en"
+          xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg"
+          xmlns:ns3="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:scilab="http://www.scilab.org"
+          xmlns:db="http://docbook.org/ns/docbook">
+
+  <refnamediv>
+    <refname>intquadprog</refname>
+    <refpurpose>Solves a linear quadratic problem.</refpurpose>
+  </refnamediv>
+
+
+<refsynopsisdiv>
+   <title>Calling Sequence</title>
+   <synopsis>
+   xopt = intquadprog(H,f)
+   xopt = intquadprog(H,f,intcon)
+   xopt = intquadprog(H,f,intcon,A,b)
+   xopt = intquadprog(H,f,intcon,A,b,Aeq,beq)
+   xopt = intquadprog(H,f,intcon,A,b,Aeq,beq,lb,ub)
+   xopt = intquadprog(H,f,intcon,A,b,Aeq,beq,lb,ub,x0)
+   xopt = intquadprog(H,f,intcon,A,b,Aeq,beq,lb,ub,x0,options)
+   xopt = intquadprog(H,f,intcon,A,b,Aeq,beq,lb,ub,x0,options,"file_path")
+   [xopt,fopt,exitflag,output] = intquadprog( ... )
+   
+   </synopsis>
+</refsynopsisdiv>
+
+<refsection>
+   <title>Input Parameters</title>
+   <variablelist>
+   <varlistentry><term>H :</term>
+      <listitem><para> A symmetric matrix of doubles, representing the Hessian of the quadratic problem.</para></listitem></varlistentry>
+   <varlistentry><term>f :</term>
+      <listitem><para> A vector of doubles, representing coefficients of the linear terms in the quadratic problem.</para></listitem></varlistentry>
+   <varlistentry><term>intcon :</term>
+      <listitem><para> A vector of integers, representing the variables that are constrained to be integers.</para></listitem></varlistentry>
+   <varlistentry><term>A :</term>
+      <listitem><para> A matrix of doubles, containing the coefficients of linear inequality constraints of size (m X n) where 'm' is the number of linear inequality constraints.</para></listitem></varlistentry>
+   <varlistentry><term>b :</term>
+      <listitem><para> A vector of doubles, related to 'A' and represents the linear coefficients in the linear inequality constraints of size (m X 1).</para></listitem></varlistentry>
+   <varlistentry><term>Aeq :</term>
+      <listitem><para> A matrix of doubles, containing the coefficients of linear equality constraints of size (m1 X n) where 'm1' is the number of linear equality constraints.</para></listitem></varlistentry>
+   <varlistentry><term>beq :</term>
+      <listitem><para> A vector of double, vector of doubles, related to 'Aeq' and represents the linear coefficients in the equality constraints of size (m1 X 1).</para></listitem></varlistentry>
+   <varlistentry><term>lb :</term>
+      <listitem><para> A vector of doubles, containing the lower bounds of the variables of size (1 X n) or (n X 1) where 'n' is the number of variables.</para></listitem></varlistentry>
+   <varlistentry><term>ub :</term>
+      <listitem><para> A vector of doubles, containing the upper bounds of the variables of size (1 X n) or (n X 1) where 'n' is the number of variables.</para></listitem></varlistentry>
+   <varlistentry><term>x0 :</term>
+      <listitem><para> A vector of doubles, containing the starting values of variables of size (1 X n) or (n X 1) where 'n' is the number of variables.</para></listitem></varlistentry>
+   <varlistentry><term>options :</term>
+      <listitem><para> A list, containing the option for user to specify. See below for details.</para></listitem></varlistentry>
+	<varlistentry><term>file_path :</term>
+      <listitem><para> path to bonmin opt file if used.</para></listitem></varlistentry> 
+</variablelist>
+</refsection>
+<refsection>
+<title> Outputs</title>
+ <variablelist>
+      <varlistentry><term>xopt :</term>
+      <listitem><para> A vector of doubles, containing the computed solution of the optimization problem.</para></listitem></varlistentry>
+   <varlistentry><term>fopt :</term>
+      <listitem><para> A double, containing the value of the function at xopt.</para></listitem></varlistentry>
+   <varlistentry><term>exitflag :</term>
+      <listitem><para> An integer, containing the flag which denotes the reason for termination of algorithm. See below for details.</para></listitem></varlistentry>
+      <varlistentry><term>output :</term>
+      <listitem><para> A structure, containing the information about the optimization. See below for details.</para></listitem></varlistentry>
+</variablelist>
+</refsection>
+
+<refsection>
+   <title>Description</title>
+   <para>
+Search the minimum of a constrained linear quadratic optimization problem specified by :
+   </para>
+   <para>
+<latex>
+\begin{eqnarray}
+&amp;\mbox{min}_{x}
+&amp; 1/2⋅x^T⋅H⋅x + f^T⋅x  \\
+&amp; \text{subject to} &amp; A⋅x \leq b \\
+&amp; &amp; Aeq⋅x = beq \\
+&amp; &amp; lb \leq x \leq ub \\
+&amp; &amp; x_i \in \!\, \mathbb{Z}, i \in \!\, intcon\\
+\end{eqnarray}
+</latex>
+   </para>
+   <para>
+intquadprog calls Bonmin, a library written in C++ to solve the quadratic problem.
+   </para>
+   <para>
+The exitflag allows to know the status of the optimization which is given back by Ipopt.
+<itemizedlist>
+<listitem>0 : Optimal Solution Found </listitem>
+<listitem>1 : InFeasible Solution.</listitem>
+<listitem>2 : Objective Function is Continuous Unbounded.</listitem>
+<listitem>3 : Limit Exceeded.</listitem>
+<listitem>4 : User Interrupt.</listitem>
+<listitem>5 : MINLP Error.</listitem>
+</itemizedlist>
+   </para>
+   <para>
+For more details on exitflag, see the Bonmin documentation which can be found on http://www.coin-or.org/Bonmin
+   </para>
+   <para>
+</para>
+   <para>
+The output data structure contains detailed information about the optimization process.
+It is of type "struct" and contains the following fields.
+<itemizedlist>
+<listitem>output.constrviolation: The max-norm of the constraint violation.</listitem>
+</itemizedlist>
+   </para>
+   <para>
+</para>
+</refsection>
+<para>
+A few examples displaying the various functionalities of intquadprog have been provided below. You will find a series of problems and the appropriate code snippets to solve them.
+   </para>
+<refsection>
+   <title>Example</title>
+    <para>
+ Here we solve a simple objective function.
+   </para>
+   <para>
+Find x in R^6 such that it minimizes:
+   </para>
+   <para>
+<latex>
+\begin{eqnarray}
+\mbox{min}_{x}\ f(x) &amp;= \dfrac{1}{2}x'\boldsymbol{\cdot} H\boldsymbol{\cdot}x + f' \boldsymbol{\cdot}  x\\
+\text{Where: } H &amp;= I_{6}\\
+F &amp;=
+\begin{array}{cccccc}
+[1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6]
+\end{array}
+\end{eqnarray}\\
+\text{With integer constraints as: } \\
+\begin{eqnarray}
+\begin{array}{c}
+[2 &amp; 4] \\
+\end{array}
+\end{eqnarray}
+</latex>
+   </para>
+   <para>
+
+   </para>
+   <programlisting role="example"><![CDATA[
+//Example 1:
+//Minimize 0.5*x'*H*x + f'*x with
+f=[1; 2; 3; 4; 5; 6]; H=eye(6,6);
+//Integer Constraints
+intcon = [2 ,4];
+//Running intquadprog
+[xopt,fopt,exitflag,output,lambda]=intquadprog(H,f,intcon)
+   ]]></programlisting>
+</refsection>
+
+<refsection>
+    <title>Example</title>
+ We proceed to add simple linear inequality constraints.
+
+<para>
+<latex>
+\begin{eqnarray}
+\&amp;x_{2} + x_{4}+ 2x_{5} - x_{6}&amp;\leq -1\\ 
+\&amp;-x_{1} + 2x_{3} + x_{4} + x_{5}&amp;\leq 2.5\\ 
+\end{eqnarray}
+</latex>
+   </para>
+   <para>
+
+   </para>
+   <programlisting role="example"><![CDATA[
+//Example 2:
+f=[1; 2; 3; 4; 5; 6]; H=eye(6,6);
+//Inequality constraints
+A= [0,1,0,1,2,-1;
+-1,0,2,1,1,0];
+b = [-1; 2.5];
+//Integer Constraints
+intcon = [2 ,4];
+//Running intquadprog
+[xopt,fopt,exitflag,output]=intquadprog(H,f,intcon,A,b)
+   ]]></programlisting>
+</refsection>
+
+<refsection>
+   <title>Example</title>
+   Here we build up on the previous example by adding linear equality constraints.
+We add the following constraints to the problem specified above:
+<para>
+<latex>
+\begin{eqnarray}
+&amp;x_{1} - x_{2} + x_{3} + 3x_{5} + x_{6}&amp;= 1 \\
+&amp;-x_{1} + 2x_{3}+ x_{4} + x_{5}&amp;= 2\\
+&amp;2x_{1} + 5x_{2}+ 3x_{3} + x_{5}&amp;= 3
+\end{eqnarray}
+</latex>
+   </para>
+   <para>
+
+   </para>
+   <programlisting role="example"><![CDATA[
+//Example 3:
+//Minimize 0.5*x'*H*x + f'*x with
+f=[1; 2; 3; 4; 5; 6]; H=eye(6,6);
+//Inequality constraints
+A= [0,1,0,1,2,-1;
+-1,0,2,1,1,0];
+b = [-1; 2.5];
+//Equality constraints
+Aeq= [1,-1,1,0,3,1;
+-1,0,-3,-4,5,6;
+2,5,3,0,1,0];
+beq=[1; 2; 3];
+//Integer Constraints
+intcon = [2 ,4];
+//Running intquadprog
+[xopt,fopt,exitflag,output]=intquadprog(H,f,intcon,A,b,Aeq,beq)
+   ]]></programlisting>
+</refsection>
+
+<refsection>
+<title>Example</title>
+<para>
+   In this example, we proceed to add the upper and lower bounds to the objective function.
+</para>
+<para>
+<latex>
+\begin{eqnarray}
+-1000 &amp;\leq x_{1} &amp;\leq 10000\\
+-10000 &amp;\leq x_{2} &amp;\leq 100\\
+0 &amp;\leq x_{3} &amp;\leq 1.5\\
+-1000 &amp;\leq x_{4} &amp;\leq 100\\
+-1000 &amp;\leq x_{5} &amp;\leq 100\\
+-1000 &amp;\leq x_{6} &amp;\leq 1000
+\end{eqnarray}
+</latex>
+   </para>
+   <para>
+
+   </para>
+      <programlisting role="example"><![CDATA[
+//Example 4:
+//Minimize 0.5*x'*H*x + f'*x with
+f=[1; 2; 3; 4; 5; 6]; H=eye(6,6);
+//Inequality constraints
+A= [0,1,0,1,2,-1;
+-1,0,2,1,1,0];
+b = [-1; 2.5];
+//Equality constraints
+Aeq= [1,-1,1,0,3,1;
+-1,0,-3,-4,5,6;
+2,5,3,0,1,0];
+beq=[1; 2; 3];
+//Variable bounds
+lb=[-1000; -10000; 0; -1000; -1000; -1000];
+ub=[10000; 100; 1.5; 100; 100; 1000];
+//Integer Constraints
+intcon = [2 ,4];
+//Running intquadprog
+[xopt,fopt,exitflag,output]=intquadprog(H,f,intcon,A,b,Aeq,beq,lb,ub)
+   ]]></programlisting>
+</refsection>
+
+<refsection>
+   <title>Example</title>
+<para>
+In this example, we initialize the values of x to speed up the computation. We further enhance the functionality of qpipoptmat by setting input options. 
+</para>
+   <programlisting role="example"><![CDATA[
+//Example 5:
+//Minimize 0.5*x'*H*x + f'*x with
+f=[1; 2; 3; 4; 5; 6]; H=eye(6,6);
+//Inequality constraints
+A= [0,1,0,1,2,-1;
+-1,0,2,1,1,0];
+b = [-1; 2.5];
+//Equality constraints
+Aeq= [1,-1,1,0,3,1;
+-1,0,-3,-4,5,6;
+2,5,3,0,1,0];
+beq=[1; 2; 3];
+//Variable bounds
+lb=[-1000; -10000; 0; -1000; -1000; -1000];
+ub=[10000; 100; 1.5; 100; 100; 1000];
+//Initial guess and options
+x0 = repmat(0,6,1);
+options = list("MaxIter", 300, "CpuTime", 100);
+//Integer Constraints
+intcon = [2 ,4];
+//Running intquadprog
+[xopt,fopt,exitflag,output]=intquadprog(H,f,intcon,A,b,Aeq,beq,lb,ub,x0,options)
+   ]]></programlisting>
+</refsection>
+
+<refsection>
+<title>Example</title>
+Infeasible Problems: Find x in R^6 such that it minimizes the objective function used above under the following constraints:
+<para>
+<latex>
+\begin{eqnarray}
+begin{eqnarray}
+\hspace{70pt} &amp;x_{2} + x_{4}+ 2x_{5} - x_{6}&amp;\leq -1\\ 
+\hspace{70pt} &amp;-x_{1} + 2x_{3} + x_{4} + x_{5}&amp;\leq 2.5\\ 
+\hspace{70pt} &amp;x_{2} + x_{4}+ 2x_{5} - x_{6}&amp;= 4 \\
+\hspace{70pt} &amp;-x_{1} + 2x_{3}+ x_{4} + x_{5}&amp;= 2\\
+\\ \end{eqnarray}\\
+\text{With integer constraints as: } \\
+\begin{eqnarray}
+\begin{array}{c}
+[2 &amp; 4] \\
+\end{array}
+\end{eqnarray}
+</latex>
+   </para>
+<para>
+</para>
+<programlisting role="example"><![CDATA[
+//Example 6:
+//Minimize 0.5*x'*H*x + f'*x with
+f=[1; 2; 3; 4; 5; 6]; H=eye(6,6);
+f=[1; 2; 3; 4; 5; 6]; H=eye(6,6);
+//Inequality constraints
+A= [0,1,0,1,2,-1;
+-1,0,2,1,1,0];
+b = [-1; 2.5];
+//Equality constraints
+Aeq= [0,1,0,1,2,-1;
+-1,0,-3,-4,5,6];
+beq=[4; 2];
+//Integer Constraints
+intcon = [2 ,4];
+//Running intquadprog
+[xopt,fopt,exitflag,output]=intquadprog(H,f,intcon,A,b,Aeq,beq)
+]]></programlisting>
+</refsection>
+
+<refsection>
+   <title>Example</title>
+<para>
+Unbounded Problems: Find x in R^6 such that it minimizes the objective function used above under the following constraints:
+</para>
+<para>
+<latex>
+\begin{eqnarray}
+\mbox{min}_{x}\ f(x) &amp;= \dfrac{1}{2}x'\boldsymbol{\cdot} H\boldsymbol{\cdot}x + f' \boldsymbol{\cdot}  x\\
+\text{Where H is specified below and} \\
+F &amp;=
+\begin{array}{cccccc}
+[1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6]
+\end{array}
+\end{eqnarray}\\
+\text{Subjected to: }\\
+\begin{eqnarray}
+\hspace{70pt} &amp;x_{2} + x_{4}+ 2x_{5} - x_{6}&amp;\leq -1\\ 
+\hspace{70pt} &amp;-x_{1} + 2x_{3} + x_{4} + x_{5}&amp;\leq 2.5\\ 
+\hspace{70pt} &amp;x_{1} - x_{2} + x_{3} + 3x_{5} + x_{6}&amp;= 1 \\
+\hspace{70pt} &amp;-x_{1} + 2x_{3}+ x_{4} + x_{5}&amp;= 2\\
+\\ \end{eqnarray}
+</latex>
+   </para>
+<para>
+</para>
+   <programlisting role="example"><![CDATA[
+//Example 7:
+//Minimize 0.5*x'*H*x + f'*x with
+f=[1; 2; 3; 4; 5; 6]; H=eye(6,6); H(1,1) = -1;
+//Inequality constraints
+A= [0,1,0,1,2,-1;
+-1,0,2,1,1,0];
+b = [-1; 2.5];
+//Equality constraints
+Aeq= [1,-1,1,0,3,1;
+-1,0,-3,-4,5,6];
+beq=[1; 2];
+intcon = [2 ,4];
+//Running intquadprog
+[xopt,fopt,exitflag,output]=intquadprog(H,f,intcon,A,b,Aeq,beq)
+]]></programlisting>
+</refsection>
+
+<refsection>
+   <title>Authors</title>
+   <simplelist type="vert">
+   <member>Akshay Miterani and Pranav Deshpande</member>
+   </simplelist>
+</refsection>
+</refentry>

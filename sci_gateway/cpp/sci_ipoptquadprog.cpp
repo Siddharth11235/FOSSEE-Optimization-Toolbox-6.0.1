@@ -27,7 +27,7 @@ int sci_solveqp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, 
 {
 	using namespace Ipopt;
 
-	if (nin !=11) 
+	if (nin !=11) //Checking the input arguments
 	{
         	Scierror(999, "%s: Wrong number of input arguments: %d expected.\n", fname, 11);
         	return STATUS_ERROR; 
@@ -39,8 +39,7 @@ int sci_solveqp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, 
 		Scierror(999, "%s: Wrong number of output argument(s): %d expected.\n", fname, 7);
 		return 1;
 	}
-	
-	// Error management variable
+
 
 	// Input arguments
 	double *QItems=NULL,*PItems=NULL,*conMatrix=NULL,*conUB=NULL,*conLB=NULL;
@@ -65,8 +64,6 @@ int sci_solveqp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, 
     	Scierror(999, "%s: Wrong type for input argument #%d: An int expected.\n", fname, 1);
     	return 1;
 	}
-
-	
 
 	scilab_getInteger32(env, in[0], &nVars);
 
@@ -116,7 +113,6 @@ int sci_solveqp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, 
     		Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 6);
    			return 1;
 		}	
-		
 
 		scilab_getDoubleArray(env, in[5], &conLB);
 

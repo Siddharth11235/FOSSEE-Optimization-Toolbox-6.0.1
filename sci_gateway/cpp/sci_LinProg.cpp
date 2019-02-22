@@ -47,7 +47,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 
 	scilabVar in2 = NULL;
 	
-	if (nin !=9) 
+	if (nin !=9) //Checking the input arguments
 	{
         	Scierror(999, "%s: Wrong number of input arguments: %d expected.\n", fname, 9);
         	return STATUS_ERROR; 
@@ -67,8 +67,6 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
     	Scierror(999, "%s: Wrong type for input argument #%d: An int expected.\n", fname, 1);
     	return 1;
 	}
-
-	
 
 	scilab_getInteger32(env, in[0], &nVars);
 
@@ -142,10 +140,10 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 
 	//ub matrix from scilab
 	if (scilab_isDouble(env, in[7]) == 0 || scilab_isMatrix2d(env, in[7]) == 0)
-    	{
-        	Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 8);
-       		return 1;
-    	}	
+	{
+    	Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 8);
+   		return 1;
+	}	
 	
 	scilab_getDoubleArray(env, in[7], &ub);
 

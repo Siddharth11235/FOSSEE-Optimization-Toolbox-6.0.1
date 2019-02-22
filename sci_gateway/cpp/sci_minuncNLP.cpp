@@ -10,6 +10,7 @@
 // Email: toolbox@scilab.in
 
 #include "minuncNLP.hpp"
+#include "sci_iofunc.hpp"
 
 extern "C"
 {
@@ -90,7 +91,7 @@ bool minuncNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
   	int* funptr=NULL;  
   	if (scilab_getType(env, in[0]) != 13)
 	{
-    	Scierror(999, "%s: Wrong type for input argument #%d: A function expected.\n", fname, 1);
+    	Scierror(999, "Wrong type for input argument #%d: A function expected.", 1);
    		return 1;
 	}	
 
@@ -99,40 +100,32 @@ bool minuncNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
   	char name[20]="f";
   	double obj=0;
   	const Number *xNew=x;
-  	createMatrixOfDouble(pvApiCtx, 7, 1, numVars_, xNew);
+	CreateVar( 7, 1, 1, numVars_, xNew );
+  	//createMatrixOfDouble(pvApiCtx, 7, 1, numVars_, xNew);
   	int positionFirstElementOnStackForScilabFunction = 7;
   	int numberOfRhsOnScilabFunction = 1;
   	int numberOfLhsOnScilabFunction = 2;
   	int pointerOnScilabFunction     = *funptr;
   
-  	C2F(scistring)(&positionFirstElementOnStackForScilabFunction,name,
+  	C2F(sci_strings)(&positionFirstElementOnStackForScilabFunction,name,
                                                                &numberOfLhsOnScilabFunction,
                                                                &numberOfRhsOnScilabFunction,(unsigned long)strlen(name));
                                
-
-	if (scilab_isDouble(env, in[7]) == 0 || scilab_isScalar(env, in[7]) == 0)
-	{
-    	Scierror(999, "%s: Wrong type for input argument #%d: An int expected.\n", fname, 5);
-    	return 1;
+  	if(getDoubleFromScilab(8,&check))
+  	{
+		return true;
 	}
-
-	scilab_getDouble(env, in[7], &check);
-
-
 	if (check==1)
 	{
 		return true;
 	}	
 	else
 	{ 
-		if (scilab_isDouble(env, in[6]) == 0 || scilab_isScalar(env, in[6]) == 0)
-		{
-			sciprint("No Objective value");
+		if(getDoubleFromScilab(7,&obj))
+  		{
+			sciprint("No obj value");
 			return 1;
-		}
-
-		scilab_getDouble(env, in[6], &obj);
-
+  		}
   		obj_value=obj;  
 	}
   	return true;
@@ -145,16 +138,13 @@ bool minuncNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f
   	if (flag1_==0)
   	{	
   		int* gradhessptr=NULL;
-  		if (scilab_getType(env, in[1]) != 13)
-		{
-			Scierror(999, "%s: Wrong type for input argument #%d: A function expected.\n", fname, 2);
-	   		return 1;
-		}	
-
-		scilab_getPointer( env, in[1], &gradhesptr); 
+  		if(getFunctionFromScilab(2,&gradhessptr))
+  		{
+			return 1;
+  		}  
   		const Number *xNew=x;
   		double t=1;
-  		createMatrixOfDouble(pvApiCtx, 7, 1, numVars_, xNew);
+  		CreateVar( 7, 1, 1, numVars_, xNew );
   		createScalarDouble(pvApiCtx, 8,t);
   		int positionFirstElementOnStackForScilabFunction = 7;
   		int numberOfRhsOnScilabFunction = 2;
@@ -162,7 +152,7 @@ bool minuncNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f
   		int pointerOnScilabFunction     = *gradhessptr;
 		char name[20]="gradhess";
  
-  		C2F(scistring)(&positionFirstElementOnStackForScilabFunction,name,
+  		C2F(sci_strings)(&positionFirstElementOnStackForScilabFunction,name,
                                                                &numberOfLhsOnScilabFunction,
                                                                &numberOfRhsOnScilabFunction,(unsigned long)strlen(name));
   	}
@@ -170,33 +160,27 @@ bool minuncNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f
   	else if (flag1_==1)
   	{
   		int* gradptr=NULL;
-  		if (scilab_getType(env, in[3]) != 13)
-		{
-			Scierror(999, "%s: Wrong type for input argument #%d: A function expected.\n", fname, 4);
-	   		return 1;
-		}	
-
-		scilab_getPointer( env, in[3], &gradptr);
+  		if(getFunctionFromScilab(4,&gradptr))
+  		{
+			return 1;
+  		}  
   		const Number *xNew=x;
-	  	createMatrixOfDouble(pvApiCtx, 7, 1, numVars_, xNew);
+	  	CreateVar( 7, 1, 1, numVars_, xNew );
   		int positionFirstElementOnStackForScilabFunction = 7;
   		int numberOfRhsOnScilabFunction = 1;
   		int numberOfLhsOnScilabFunction = 2;
   		int pointerOnScilabFunction     = *gradptr;
 		char name[20]="fGrad1";
  	
-  		C2F(scistring)(&positionFirstElementOnStackForScilabFunction,name,
+  		C2F(sci_strings)(&positionFirstElementOnStackForScilabFunction,name,
         	                                                       &numberOfLhsOnScilabFunction,
         	                                                       &numberOfRhsOnScilabFunction,(unsigned long)strlen(name));
    	}
 
-	if (scilab_isDouble(env, in[7]) == 0 || scilab_isScalar(env, in[7]) == 0)
-	{
-    	Scierror(999, "%s: Wrong type for input argument #%d: An int expected.\n", fname, 5);
-    	return 1;
+	if(getDoubleFromScilab(8,&check))
+  	{
+		return true;
 	}
-
-	scilab_getDouble(env, in[7], &check);
 	if (check==1)
 	{
 		return true;
@@ -205,13 +189,12 @@ bool minuncNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f
 	{ 
 		double* resg;  
   		int x0_rows,x0_cols;                           
-  		if (scilab_isDouble(env, in[6]) == 0 || scilab_isMatrix2d(env, in[6]) == 0)
-		{
-			Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 7);
+  		if(getDoubleMatrixFromScilab(7, &x0_rows, &x0_cols, &resg))
+  		{
+			sciprint("No results");
 			return 1;
-		}
-		
-		scilab_getDoubleArray(env, in[6], &resg);
+			
+  		}
 	
   		Index i;
   		for(i=0;i<numVars_;i++)
@@ -266,17 +249,13 @@ bool minuncNLP::eval_h(Index n, const Number* x, bool new_x,Number obj_factor, I
 		if(flag2_==0)
 	  	{
 			int* gradhessptr=NULL;
-			if (scilab_getType(env, in[1]) != 13)
+			if(getFunctionFromScilab(2,&gradhessptr))
 			{
-				Scierror(999, "%s: Wrong type for input argument #%d: A function expected.\n", fname, 2);
-		   		return 1;
-			}	
-
-			scilab_getPointer( env, in[1], &gradhesptr);    
-     	
+				return 1;
+			}          	
 			const Number *xNew=x;
   			double t=2;
-			createMatrixOfDouble(pvApiCtx, 7, 1, numVars_, xNew);
+			CreateVar( 7, 1, 1, numVars_, xNew );
   			createScalarDouble(pvApiCtx, 8,t);
   			int positionFirstElementOnStackForScilabFunction = 7;
   			int numberOfRhsOnScilabFunction = 2;
@@ -284,7 +263,7 @@ bool minuncNLP::eval_h(Index n, const Number* x, bool new_x,Number obj_factor, I
   			int pointerOnScilabFunction     = *gradhessptr;
 			char name[20]="gradhess";
   	
-  			C2F(scistring)(&positionFirstElementOnStackForScilabFunction,name,
+  			C2F(sci_strings)(&positionFirstElementOnStackForScilabFunction,name,
                 	                                               &numberOfLhsOnScilabFunction,
                 	                                               &numberOfRhsOnScilabFunction,(unsigned long)strlen(name));
  	    }	
@@ -292,33 +271,27 @@ bool minuncNLP::eval_h(Index n, const Number* x, bool new_x,Number obj_factor, I
  	    else if (flag2_==1)
  	    {		
 			int* hessptr=NULL;
-			if (scilab_getType(env, in[5]) != 13)
+			if(getFunctionFromScilab(6,&hessptr))
 			{
-				Scierror(999, "%s: Wrong type for input argument #%d: A function expected.\n", fname, 6);
-		   		return 1;
-			}	
-
-			scilab_getPointer( env, in[5], &hessptr);             	
+				return 1;
+			}          	
 			const Number *xNew=x;	
-  			createMatrixOfDouble(pvApiCtx, 7, 1, numVars_, xNew);
+  			CreateVar( 7, 1, 1, numVars_, xNew );
   			int positionFirstElementOnStackForScilabFunction = 7;
   			int numberOfRhsOnScilabFunction = 1;
   			int numberOfLhsOnScilabFunction = 2;
   			int pointerOnScilabFunction     = *hessptr;
 			char name[20]="fHess1";
   	
-  			C2F(scistring)(&positionFirstElementOnStackForScilabFunction,name,
+  			C2F(sci_strings)(&positionFirstElementOnStackForScilabFunction,name,
                 	                                               &numberOfLhsOnScilabFunction,
                 	                                               &numberOfRhsOnScilabFunction,(unsigned long)strlen(name));	
  	    }	
 
-		if (scilab_isDouble(env, in[7]) == 0 || scilab_isScalar(env, in[7]) == 0)
-		{
-			Scierror(999, "%s: Wrong type for input argument #%d: An int expected.\n", fname, 8);
-			return 1;
+		if(getDoubleFromScilab(8,&check))
+  		{
+			return true;
 		}
-
-		scilab_getDouble(env, in[7], &check);
 		if (check==1)
 		{
 			return true;
@@ -327,13 +300,11 @@ bool minuncNLP::eval_h(Index n, const Number* x, bool new_x,Number obj_factor, I
 		{ 
 	        double* resh;  
   			int x0_rows,x0_cols;                           
-  			if (scilab_isDouble(env, in[6]) == 0 || scilab_isMatrix2d(env, in[6]) == 0)
+  			if(getDoubleMatrixFromScilab(7, &x0_rows, &x0_cols, &resh))
 			{
-				Scierror(999, "%s: Wrong type for input argument #%d: A double matrix expected.\n", fname, 7);
+				sciprint("No results");
 				return 1;
 			}
-		
-			scilab_getDoubleArray(env, in[6], &resh);
 			
 			Index index=0;
 			for (Index row=0;row < numVars_ ;++row)

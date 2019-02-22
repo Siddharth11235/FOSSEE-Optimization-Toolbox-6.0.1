@@ -40,7 +40,7 @@ int sci_rmps(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt opt, int
 
 
 
-   if (nin !=2) 
+   	if (nin !=2) 
 	{
         	Scierror(999, "%s: Wrong number of input arguments: %d expected.\n", fname, 2);
         	return STATUS_ERROR; 

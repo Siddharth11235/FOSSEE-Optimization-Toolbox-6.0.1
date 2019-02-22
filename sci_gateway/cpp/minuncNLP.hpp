@@ -12,12 +12,16 @@
 #ifndef __minuncNLP_HPP__
 #define __minuncNLP_HPP__
 #include "IpTNLP.hpp"
+#include "api_scilab.h"
 
 using namespace Ipopt;
 
 class minuncNLP : public TNLP
 {
 	private:
+	scilabEnv env;
+	scilabVar* in;	
+	scilabVar* out;
 
   	Index numVars_;	                 //Number of input variables
 
