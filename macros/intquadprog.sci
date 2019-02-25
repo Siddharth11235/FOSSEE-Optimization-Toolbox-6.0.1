@@ -368,9 +368,12 @@ function varargout = intquadprog (varargin)
 	end
 	
 	// Checking if the specified options file exists or not
-  	if (~isfile(bonmin_options_file) & ~bonmin_options_file=='') then
-    		error(999, 'The specified options file does not exist!');
+
+	
+  	if (~isfile(bonmin_options_file) & ~(bonmin_options_file==  "") ) then
+   		error(999, "The specified options file does not exist!");
  	end
+	
  	
  	// Validating Options
  	if (type(options) ~= 15) then

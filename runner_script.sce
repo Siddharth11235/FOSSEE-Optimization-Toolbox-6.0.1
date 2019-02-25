@@ -8,3 +8,4 @@ exec builder.sce;
 exec("loader.sce");
 
 
+help intquadprog
