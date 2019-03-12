@@ -30,7 +30,7 @@ Function_Names = [
 		"solveqp","sci_solveqp", "csci6";
 
 		//Unconstrained Optimization
-		//"solveminuncp","sci_solveminuncp", "csci6";  
+		"solveminuncp","sci_solveminuncp", "csci6";  
 
 		//Integer programming functions (CBC)
 		'matintlinprog','sci_matintlinprog', 'csci6';
@@ -50,9 +50,9 @@ Files = [
 		"sci_ipoptquadprog.cpp",
 		"sci_QuadNLP.cpp",
 
-		//"sci_ipoptfminunc.cpp",
-		//"sci_minuncNLP.cpp",
-	//	"sci_minuncTMINLP.cpp",
+		"sci_ipoptfminunc.cpp",
+		"sci_minuncNLP.cpp",
+
 		
         //CLP
         "sci_LinProg.cpp",
@@ -84,7 +84,7 @@ Function_Names = [
 		"solveqp","sci_solveqp", "csci6";  
 
 		//Unconstrained Optimization
-		//"solveminuncp","sci_solveminuncp", "csci6";   
+		"solveminuncp","sci_solveminuncp", "csci6";   
 
 		//Integer programming functions (CBC)
 		'matintlinprog','sci_matintlinprog', 'csci6';
@@ -103,9 +103,8 @@ Files = [
 		"sci_ipoptquadprog.cpp",
 		"sci_QuadNLP.cpp",
 
-		//"sci_ipoptfminunc.cpp",
-		//"sci_minuncNLP.cpp",
-		//"sci_minuncTMINLP.cpp",
+		"sci_ipoptfminunc.cpp",
+		"sci_minuncNLP.cpp",
 
         //CLP
         "sci_LinProg.cpp",

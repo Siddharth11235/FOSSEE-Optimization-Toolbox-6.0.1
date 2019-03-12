@@ -23,6 +23,8 @@ extern "C"
 #include <localization.h>
 #include <sciprint.h>
 #include <iostream>
+#include <wchar.h>
+
 
 using namespace std;
 
@@ -37,8 +39,8 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
 
 
 	//Function pointers, input matrix(Starting point) pointer, flag variable 
-	//int* funptr=NULL;
-	int* gradhesptr=NULL;
+	wchar_t* funName = NULL;
+	wchar_t* gradhesptr=NULL;
 	double* x0ptr=NULL;
 	int flag1,flag2;
         
@@ -47,7 +49,7 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
 	static unsigned int nVars = 0,nCons = 0;
 	int x0_rows, x0_cols;
 
-	int* funptr;
+		
 	
 	// Output arguments
 	double ObjVal=0,iteration=0,cpuTime=0,fobj_eval=0;
@@ -64,7 +66,7 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
         	return STATUS_ERROR; 
 	}
 	
-	if (nout !=9) //Checking the output arguments
+	if (nout !=1) //Checking the output arguments
 
 	{
 		Scierror(999, "%s: Wrong number of output argument(s): %d expected.\n", fname, 9);
@@ -76,24 +78,26 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
 	
 	//Objective Function
 
-	if (scilab_getType(env, in[0]) != 13)
+	
+
+	if (scilab_isString(env, in[0]) == 0 || scilab_isScalar(env, in[0]) == 0)
 	{
     	Scierror(999, "%s: Wrong type for input argument #%d: A function expected.\n", fname, 1);
    		return 1;
 	}	
 
-	scilab_getPointer( env, in[0], &funptr);
+	scilab_getString(env, in[0], &funName);
 
 
 
  	//Function for gradient and hessian
-	if (scilab_getType(env, in[1]) != 13)
+	if (scilab_isString(env, in[1]) == 0 || scilab_isScalar(env, in[1]) == 0)
 	{
     	Scierror(999, "%s: Wrong type for input argument #%d: A function expected.\n", fname, 2);
    		return 1;
 	}	
 
-	scilab_getPointer( env, in[1], &gradhesptr);
+	scilab_getString(env, in[1], &gradhesptr);
 	
 	//Flag for Gradient from Scilab
 
@@ -104,7 +108,8 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
     	return 1;
 	}
 
-	scilab_getInteger32(env, in[1], &flag1);
+	scilab_getInteger32(env, in[2], &flag1);
+
 	
 	//Flag for Hessian from Scilab
 	if (scilab_isInt32(env, in[4]) == 0 || scilab_isScalar(env, in[4]) == 0)
@@ -124,6 +129,7 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
 	}
 	
 	scilab_getDoubleArray(env, in[6], &x0ptr);
+	int size1 = scilab_getDim2d(env, in[6], &x0_rows, &x0_cols);
 
 	//Getting number of iterations
 	if (scilab_isList(env, in[7]) == 0)
@@ -147,21 +153,26 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
     //Initialization of parameters
 	nVars=x0_cols;
 	nCons=0;
-        
-    // Starting Ipopt
 
-	SmartPtr<minuncNLP> Prob = new minuncNLP(nVars, nCons, x0ptr, flag1, flag2);
+	
+
+    out[0] = scilab_createDouble(env, 0);
+    //Starting Ipopt
+
+
+	SmartPtr<minuncNLP> Prob = new minuncNLP(env, in, nVars, nCons, x0ptr, flag1, flag2);
 	SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
-
+	
 	////////// Managing the parameters //////////
 
 	app->Options()->SetNumericValue("tol", 1e-7);
 	app->Options()->SetIntegerValue("max_iter", nIters);
 	app->Options()->SetNumericValue("max_cpu_time", cpu_time);
-
+	
 	///////// Initialize the IpoptApplication and process the options /////////
 	ApplicationReturnStatus status;
  	status = app->Initialize();
+	
 	if (status != Solve_Succeeded) 
 	{
 	  	sciprint("\n*** Error during initialization!\n");
@@ -169,9 +180,10 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
  	 }
 	 // Ask Ipopt to solve the problem
 	
-	 status = app->OptimizeTNLP((SmartPtr<TNLP>&)Prob);
-	 
+	status = app->OptimizeTNLP((SmartPtr<TNLP>&)Prob);
+	 sciprint("\Solved\n");
 	 cpuTime = app->Statistics()->TotalCPUTime();
+	
 
 	 app->Statistics()->NumberOfEvaluations(int_fobj_eval, int_constr_eval, int_fobj_grad_eval, int_constr_jac_eval, int_hess_eval);
 	 
@@ -183,7 +195,7 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
 
 
 
-	fX = Prob->getX();
+/* 	fX = Prob->getX();
 	fGrad = Prob->getGrad();
 	fHess = Prob->getHess();
 	ObjVal = Prob->getObjVal();
@@ -213,7 +225,7 @@ int sci_solveminuncp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
 	// As the SmartPtrs go out of scope, the reference count
 	// will be decremented and the objects will automatically
 	// be deleted.
-
+*/
 	return 0;
 }
 }
