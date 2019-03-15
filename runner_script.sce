@@ -7,22 +7,15 @@ ulink;
 exec builder.sce;
 exec("loader.sce");
 
+//Example 3: Unbounded objective function.
+//Objective function to be minimised
 function y=f(x)
-y= -x(1)^2 - x(2)^2;
+y=-((x(1)-1)^2+(x(2)-1)^2);
 endfunction
-//Starting point
-x0=[2,1];
-//Gradient of objective function
-function y=fGrad(x)
-y= [-2*x(1),-2*x(2)];
-endfunction
-//Hessian of Objective Function
-function y=fHess(x)
-y= [-2,0;0,-2];
-endfunction
+//Variable bounds
+x1 = [-%inf , -%inf];
+x2 = [];
 //Options
-options=list("MaxIter", [1500], "CpuTime", [500], "GradObj", fGrad, "Hessian", fHess);
+options=list("MaxIter",[1500],"CpuTime", [100],"TolX",[1e-6]);
 //Calling Ipopt
-//[xopt,fopt,exitflag,output,gradient,hessian]=fminunc(f,x0,options)
-xo=fminunc(f,x0,options)
-
+[x,fval,exitflag,output,lambda] =fminbnd(f, x1, x2, options)

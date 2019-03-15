@@ -382,8 +382,8 @@ function [xopt,fopt,exitflag,output,gradient,hessian] = fminunc (varargin)
 
         //Calling the Ipopt function for solving the above problem
 
-	xopt = solveminuncp("f", "gradhess", int32(flag1), "fGrad1", int32(flag2), "fHess1", x0, options);
-/*
+	//xopt = solveminuncp("f", "gradhess", int32(flag1), "fGrad1", int32(flag2), "fHess1", x0, options);
+
 	[xopt,fopt,status,iter,cpu,obj_eval,dual,gradient, hessian1] = solveminuncp("f", "gradhess", int32(flag1), "fGrad1", int32(flag2), "fHess1", x0, options);
    
 	//Calculating the values for output
@@ -469,6 +469,6 @@ function [xopt,fopt,exitflag,output,gradient,hessian] = fminunc (varargin)
         	output.Message="Invalid status returned. Notify the Toolbox authors";
         	break;
         end
-    	*/
+    	
 
 endfunction

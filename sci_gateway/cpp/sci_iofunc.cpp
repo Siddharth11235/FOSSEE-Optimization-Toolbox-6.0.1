@@ -2,16 +2,18 @@
 // (Definition of) Functions for input and output from Scilab
 // By Keyur Joshi
 
-#include "api_scilab.h"
-#include "Scierror.h"
-#include "sciprint.h"
-#include "BOOL.h"
+#include <api_scilab.h>
+#include <wchar.h>
+#include <Scierror.h>
+#include <BOOL.h>
 #include <localization.h>
-#include "call_scilab.h"
+#include <sciprint.h>
 #include <string.h>
+#include <assert.h>
 
 
 using namespace std;
+
 /*
 int getFunctionFromScilab(int argNum, int **dest)
 {	
@@ -39,25 +41,19 @@ int getFunctionFromScilab(int argNum, int **dest)
 	
 }
 */
-int getDoubleFromScilab(scilabEnv env, scilabVar* in,int argNum, double *dest)
+scilabVar* getScilabFunc(scilabEnv env, int numVars, const double* x, wchar_t* name, int nin, int nout)
 {
-	//data declarations
-	const char errMsg[]="Wrong type for input argument #%d: A double is expected.\n";
-	const int errNum=999;
+	scilabVar* out;
+	scilabVar* funcIn;
+	funcIn[0] = scilab_createDoubleMatrix2d(env, 1, numVars, 0);
+	scilab_setDoubleArray(env, funcIn[0], x);
 
-
-
-	//check that it is a non-complex double
-	if ( !scilab_isDouble(env,in[argNum]) ||  scilab_isComplex(env,in[argNum]) )
-	{
-		Scierror(errNum,errMsg,argNum);
-		return 1;
-	}
-	//retrieve and store
-	scilab_getDouble(env, in[argNum], dest);
-	return 0;
+	scilab_call(env, name, nin, funcIn, nout, out);
+	
+	
+	return out;
 }
-
+/*
 int getUIntFromScilab(scilabEnv env, scilabVar* in, int argNum, int *dest)
 {
 	
@@ -179,7 +175,7 @@ int getFixedSizeDoubleMatrixInList(int argNum, int itemPos, int rows, int cols, 
 	}
 	return 0;
 }
-*/
+
 int getStringFromScilab(scilabEnv env, scilabVar* in, int argNum, wchar_t **dest)
 {
 	
@@ -250,7 +246,7 @@ bool getHessFromScilab(int n,int numConstr_,char name[], double *x,double *obj,d
 	}	
 	return 0;
 }
-*/
+
 int getIntMatrixFromScilab(scilabEnv env, scilabVar* in, int argNum, int *dest)
 {
 	
@@ -296,5 +292,5 @@ int returnIntegerMatrixToScilab(scilabEnv env, scilabVar* out, int argNum, int r
 
 	return 0;
 }
-
+*/
 

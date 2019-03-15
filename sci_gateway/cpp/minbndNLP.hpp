@@ -9,51 +9,53 @@
 // Organization: FOSSEE, IIT Bombay
 // Email: toolbox@scilab.in
 
-#ifndef __minuncNLP_HPP__
-#define __minuncNLP_HPP__
+
+#ifndef __minbndNLP_HPP__
+#define __minbndNLP_HPP__
 #include "IpTNLP.hpp"
 #include "api_scilab.h"
 
 using namespace Ipopt;
 
-class minuncNLP : public TNLP
+class minbndNLP : public TNLP
 {
 	private:
 	scilabEnv env_;					//Scilab Environment Variable
-
-	scilabVar* in_;					//Scilab input variable pointer
 
   	Index numVars_;	                 //Number of input variables
 
   	Index numConstr_;                //Number of constraints 
 
-	Number flag1_;                   //Used for Gradient On/OFF
-	
-	Number flag2_;                   //Used for Hessian ON/OFF
- 
-  	const Number *varGuess_;	 //varGuess_ is a pointer to a matrix of size of 1*numVars_ with initial guess of all variables.
+  	Number *finalX_;           //finalX_ is a pointer to a matrix of size of 1*1
+				         //with final value for the primal variable.
 
-  	Number *finalX_;           //finalX_ is a pointer to a matrix of size of 1*numVars_ with final value for the primal variables.
+	Number *finalZl_;		 //finalZl_ is a pointer to a matrix of size of 1*numVar_
+					 // with final values for the lower bound multipliers
 
-  	Number *finalGradient_;     //finalGradient_ is a pointer to a matrix of size of numVars_*numVars_ with final value of gradient for the primal variables.
-
-  	Number *finalHessian_;      //finalHessian_ is a pointer to a matrix of size of 1*numVar_ with final value of hessian for the primal variables.
+	Number *finalZu_;		 //finalZu_ is a pointer to a matrix of size of 1*numVar_
+					 // with final values for the upper bound multipliers
 
   	Number finalObjVal_;          	 //finalObjVal_ is a scalar with the final value of the objective.
 
-  	int status_;			 		//Solver return status
+  	int status_;			 //Solver return status
 
 
-  	minuncNLP(const minuncNLP&);
-  	minuncNLP& operator=(const minuncNLP&);
+  	const Number *varUB_;	 //varUB_ is a pointer to a matrix of size of 1*1 
+					 // with upper bounds of all variable.
+
+  	const Number *varLB_;	 //varLB_ is a pointer to a matrix of size of 1*1
+					 // with lower bounds of all variable.
+	
+  	minbndNLP(const minbndNLP&);
+  	minbndNLP& operator=(const minbndNLP&);
 
 	public:
 
   	/** user defined constructor */
-  	minuncNLP(scilabEnv env, scilabVar* in, Index nV, Index nC,Number *x0,Number f1, Number f2):env_(env), in_(in), numVars_(nV), numConstr_(nC), varGuess_(x0), flag1_(f1),flag2_(f2),finalX_(0),finalGradient_(0),finalHessian_(0),finalObjVal_(1e20){	}
+  	minbndNLP(scilabEnv env, Index nV, Index nC,Number *LB,Number *UB):env_(env),numVars_(nV),numConstr_(nC),finalX_(0),finalZl_(0), finalZu_(0),varLB_(LB),varUB_(UB),finalObjVal_(1e20){	}
 
   	/** default destructor */
-  	virtual ~minuncNLP();
+  	virtual ~minbndNLP();
 
   	/** Method to return some info about the nlp */
   	virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
@@ -84,26 +86,27 @@ class minuncNLP : public TNLP
    	*/
   	virtual bool eval_jac_g(Index n, const Number* x, bool new_x,Index m, Index nele_jac, Index* iRow, Index *jCol,Number* values);
 
-
-	/*Method to call the scialb function relevant to the issue*/
-	virtual bool getScilabFunc(scilabVar* out, const Number* x, wchar_t* name, int nin, int nout);	
   	/** Method to return:
    	*   1) The structure of the hessian of the lagrangian (if "values" is NULL)
    	*   2) The values of the hessian of the lagrangian (if "values" is not NULL)
    	*/
   	virtual bool eval_h(Index n, const Number* x, bool new_x,Number obj_factor, Index m, const Number* lambda,bool new_lambda, Index nele_hess, Index* iRow,Index* jCol, Number* values);
 
+
+	//Function to call a scilab function to a C interface
+	virtual bool getScilabFunc(scilabVar* out, const Number* x, wchar_t* name, int nin, int nout);
+
   	/** This method is called when the algorithm is complete so the TNLP can store/write the solution */
   	virtual void finalize_solution(SolverReturn status,Index n, const Number* x, const Number* z_L, const Number* z_U,Index m, const Number* g, const Number* lambda,Number obj_value,const IpoptData* ip_data,IpoptCalculatedQuantities* ip_cq);
   
-  	const double * getX();		//Returns a pointer to a matrix of size of 1*numVars_ 
-					//with final value for the primal variables.
-  
-  	const double * getGrad();       //Returns a pointer to a matrix of size of 1*numVars_ 
-					//with final value of gradient for the primal variables.
+  	const double * getX();		//Returns a pointer to a matrix of size of 1*1
+					//with final value for the primal variable.
 
-  	const double * getHess();       //Returns a pointer to a matrix of size of numVars_*numVars_ 
-					//with final value of hessian for the primal variables.
+	const double * getZl();		//Returns a pointer to a matrix of size of 1*numVars_
+					// with final values for the lower bound multipliers
+
+	const double * getZu();		//Returns a pointer to a matrix of size of 1*numVars_
+					//with final values for the upper bound multipliers
 
   	double getObjVal();		//Returns the output of the final value of the objective.
 

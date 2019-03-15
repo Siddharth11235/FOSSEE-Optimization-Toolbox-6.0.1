@@ -32,6 +32,9 @@ Function_Names = [
 		//Unconstrained Optimization
 		"solveminuncp","sci_solveminuncp", "csci6";  
 
+		//Bounded Optimization
+		"solveminbndp","sci_solveminbndp", "csci6";   
+
 		//Integer programming functions (CBC)
 		'matintlinprog','sci_matintlinprog', 'csci6';
 		'mpsintlinprog','sci_mpsintlinprog','csci6';
@@ -43,7 +46,7 @@ Function_Names = [
 
 //Name of all the files to be compiled
 Files = [
-        //"sci_iofunc.cpp",
+        "sci_iofunc.cpp",
 
 		// IPOPT
 		"sci_QuadNLP.cpp",
@@ -52,6 +55,9 @@ Files = [
 
 		"sci_ipoptfminunc.cpp",
 		"sci_minuncNLP.cpp",
+
+		"sci_ipoptfminbnd.cpp",
+		"sci_minbndNLP.cpp",
 
 		
         //CLP
@@ -84,7 +90,10 @@ Function_Names = [
 		"solveqp","sci_solveqp", "csci6";  
 
 		//Unconstrained Optimization
-		"solveminuncp","sci_solveminuncp", "csci6";   
+		"solveminuncp","sci_solveminuncp", "csci6"; 
+
+		//Bounded Optimization
+		"solveminbndp","sci_solveminbndp", "csci6";   
 
 		//Integer programming functions (CBC)
 		'matintlinprog','sci_matintlinprog', 'csci6';
@@ -96,7 +105,7 @@ Function_Names = [
 
 //Name of all the files to be compiled
 Files = [
-       // "sci_iofunc.cpp",
+        "sci_iofunc.cpp",
 
         // IPOPT
 		"sci_QuadNLP.cpp",
@@ -105,6 +114,9 @@ Files = [
 
 		"sci_ipoptfminunc.cpp",
 		"sci_minuncNLP.cpp",
+
+		"sci_ipoptfminbnd.cpp",
+		"sci_minbndNLP.cpp",
 
         //CLP
         "sci_LinProg.cpp",

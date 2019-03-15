@@ -8,7 +8,7 @@
 
 
 //input
-//int getFunctionFromScilab(int argNum, int **dest);
+scilabVar* getScilabFunc(scilabEnv env, int numVars, const double* x, wchar_t* name, int nin, int nout);/*
 int getDoubleFromScilab(scilabEnv env, scilabVar* in, int argNum, double *dest);
 int getUIntFromScilab(scilabEnv env, scilabVar* in, int argNum, int *dest);
 int getIntFromScilab(scilabEnv env, scilabVar* in, int argNum, int *dest);
@@ -25,7 +25,7 @@ int return0toScilab(scilabEnv env, scilabVar* out, int argNum);
 int returnDoubleToScilab(scilabEnv env, scilabVar* out, int argNum, double retVal);
 int returnDoubleMatrixToScilab(scilabEnv env, scilabVar* out, int argNum, int rows, int cols,  const double *dest);//added const to dest
 int returnIntegerMatrixToScilab(scilabEnv env, scilabVar* out, int argNum, int rows, int cols, int *dest);
-
+*/
 
 #endif //SCI_IOFUNCHEADER
 
