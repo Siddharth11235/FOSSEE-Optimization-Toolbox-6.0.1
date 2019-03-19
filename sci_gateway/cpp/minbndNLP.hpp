@@ -22,6 +22,8 @@ class minbndNLP : public TNLP
 	private:
 	scilabEnv env_;					//Scilab Environment Variable
 
+	scilabEnv in_;					//Scilab input pointer Variable
+
   	Index numVars_;	                 //Number of input variables
 
   	Index numConstr_;                //Number of constraints 
@@ -52,7 +54,7 @@ class minbndNLP : public TNLP
 	public:
 
   	/** user defined constructor */
-  	minbndNLP(scilabEnv env, Index nV, Index nC,Number *LB,Number *UB):env_(env),numVars_(nV),numConstr_(nC),finalX_(0),finalZl_(0), finalZu_(0),varLB_(LB),varUB_(UB),finalObjVal_(1e20){	}
+  	minbndNLP(scilabEnv env, scilabVar* in, Index nV, Index nC,Number *LB,Number *UB):env_(env), in_(in),numVars_(nV),numConstr_(nC),finalX_(0),finalZl_(0), finalZu_(0),varLB_(LB),varUB_(UB),finalObjVal_(1e20){	}
 
   	/** default destructor */
   	virtual ~minbndNLP();

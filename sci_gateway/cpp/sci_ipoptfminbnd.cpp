@@ -137,7 +137,7 @@ int sci_solveminbndp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
         
         // Starting Ipopt
 
-	SmartPtr<minbndNLP> Prob = new minbndNLP(env, nVars,nCons,varLB,varUB);
+	SmartPtr<minbndNLP> Prob = new minbndNLP(env,in,nVars,nCons,varLB,varUB);
 	
 	SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
 

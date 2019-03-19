@@ -23,7 +23,7 @@ extern "C"
 #include <string.h>
 #include <assert.h>
 
-#define LOCAL_DEBUG 1
+#define LOCAL_DEBUG 0
 
 using namespace std;
 using namespace Ipopt;
@@ -38,11 +38,13 @@ minbndNLP::~minbndNLP()
 bool minbndNLP::getScilabFunc(scilabVar* out, const Number* x, wchar_t* name, int nin, int nout)
 {
 	
-	scilabVar* funcIn = (scilabVar*)malloc(sizeof(double) * (numVars_+2) * 1);
+	scilabVar* funcIn = (scilabVar*)malloc(sizeof(double) * (numVars_) * 1);
 	funcIn[0] = scilab_createDoubleMatrix2d(env_, 1, numVars_, 0);
 	scilab_setDoubleArray(env_, funcIn[0], x);
 
-	printf("Calling the relevant function\n");
+	#if LOCAL_DEBUG
+		printf("Calling the relevant function\n");
+	#endif
 	scilab_call(env_, name, nin, funcIn, nout, out);
 	
 	
@@ -103,7 +105,8 @@ bool minbndNLP::eval_jac_g(Index n, const Number* x, bool new_x,Index m, Index n
 //get value of objective function at vector x
 bool minbndNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
 {
-  	scilabVar* out = (scilabVar*)malloc(sizeof(double) * (numVars_+2) * 1);
+  	scilabVar* out = (scilabVar*)malloc(sizeof(scilabVar) * (numVars_) * 1);
+	
 	#if LOCAL_DEBUG
 		printf("Calling eval_f\n");
 	#endif	
@@ -152,20 +155,24 @@ bool minbndNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f
 		printf("eval_grad_f started\n");
 	#endif	
 	
-
-	scilabVar* out = (scilabVar*)malloc(sizeof(scilabVar) * (numVars_) * 1);
+	scilabVar* out = (scilabVar*)malloc(sizeof(scilabVar) * (numVars_) );
   	double check = 0;
-	double* resg;
-  	
-	const Number *xNew=x;
-	getScilabFunc(out, xNew, L"gradHess", 2, 2);
 
+	
+  	const Number *xNew=x;
 	#if LOCAL_DEBUG
-			printf("Function called\n");
+		printf("grad_f obtained\n");
 	#endif
-                 	                                      
-  	
-	if (scilab_isDouble(env_, out[1]) == 0 || scilab_isScalar(env_, out[1]) == 0)
+	scilabVar* funcIn = (scilabVar*)malloc(sizeof(scilabVar) * (numVars_) * 1);
+	funcIn[0] = scilab_createDoubleMatrix2d(env_, 1, numVars_, 0);
+	scilab_setDoubleArray(env_, funcIn[0], x);
+	double t= 1;
+	funcIn[1] = scilab_createDouble(env_, t);
+
+	scilab_call(env_, L"gradhess", 2, funcIn, 2, out);
+ 	
+	           
+  	if (scilab_isDouble(env_, out[1]) == 0 || scilab_isScalar(env_, out[1]) == 0)
 	{
     	Scierror(999, "Wrong type for input argument #%d: An int expected.\n", 2);
     	return 1;
@@ -189,7 +196,8 @@ bool minbndNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f
 	}	
 	else
 	{
-		if (scilab_isDouble(env_, out[0]) == 0 || scilab_isMatrix2d(env_, out[0]) == 0)
+		double* resg;  
+  		if (scilab_isDouble(env_, out[0]) == 0 || scilab_isMatrix2d(env_, out[0]) == 0)
 		{
 			Scierror(999, "Wrong type for input argument #%d: An int expected.\n", 2);
 			return 1;
@@ -197,15 +205,10 @@ bool minbndNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f
 	
 		scilab_getDoubleArray(env_, out[0], &resg);
 		
-		Index i;	
-  		for(i=0;i<numVars_;i++)
+  		for(int i=0;i<numVars_;i++)
   		{
 			grad_f[i]=resg[i];
   		}
-
-		#if LOCAL_DEBUG
-			printf("eval_grad_f finished\n");
-		#endif
 		return true;
 	}
 }
@@ -250,7 +253,15 @@ bool minbndNLP::eval_h(Index n, const Number* x, bool new_x,Number obj_factor, I
 	else 
 	{
 		const Number *xNew=x;
-		getScilabFunc(out, xNew, L"gradHess", 2, 2);
+		#if LOCAL_DEBUG
+			printf("in the gradhess block\n");
+		#endif	
+		scilabVar* funcIn = (scilabVar*)malloc(sizeof(scilabVar) * (numVars_) * 1);
+		funcIn[0] = scilab_createDoubleMatrix2d(env_, 1, numVars_, 0);
+		scilab_setDoubleArray(env_, funcIn[0], x);
+		double t= 2;
+		funcIn[1] = scilab_createDouble(env_, t);
+		scilab_call(env_, L"gradhess", 2, funcIn, 2, out);
                                
   		double* resh;
   		double check;  
