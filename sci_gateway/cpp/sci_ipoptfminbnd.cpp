@@ -109,7 +109,7 @@ int sci_solveminbndp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
 	scilab_getDoubleArray(env, in[3], &varUB);
 
 
-  
+  //Get options
  
 	if (scilab_isList(env, in[4]) == 0)
     {
@@ -121,7 +121,7 @@ int sci_solveminbndp(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt 
 	scilabVar temp3 = scilab_getListItem( env, in[4], 5);
 	
 
-	double nIters = 0,cpu_Time = 0, tol_val= 0;
+	double nIters = 0,cpu_Time =0, tol_val =0;	
 
 	scilab_getDouble(env, temp1, &nIters);
 	scilab_getDouble(env, temp2, &cpu_Time);

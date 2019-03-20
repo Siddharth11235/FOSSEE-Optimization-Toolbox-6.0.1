@@ -33,7 +33,10 @@ Function_Names = [
 		"solveminuncp","sci_solveminuncp", "csci6";  
 
 		//Bounded Optimization
-		"solveminbndp","sci_solveminbndp", "csci6";   
+		"solveminbndp","sci_solveminbndp", "csci6";
+
+		//Constrained Optimization
+		"solveminconp","sci_solveminconp", "csci6";
 
 		//Integer programming functions (CBC)
 		'matintlinprog','sci_matintlinprog', 'csci6';
@@ -58,7 +61,9 @@ Files = [
 
 		"sci_ipoptfminbnd.cpp",
 		"sci_minbndNLP.cpp",
-
+		
+		"sci_ipoptfmincon.cpp",
+		"sci_minconNLP.cpp",
 		
         //CLP
         "sci_LinProg.cpp",
@@ -95,6 +100,9 @@ Function_Names = [
 		//Bounded Optimization
 		"solveminbndp","sci_solveminbndp", "csci6";   
 
+		//Constrained Optimization
+		"solveminconp","sci_solveminconp", "csci6";
+
 		//Integer programming functions (CBC)
 		'matintlinprog','sci_matintlinprog', 'csci6';
 		'mpsintlinprog','sci_mpsintlinprog','csci6';
@@ -117,6 +125,9 @@ Files = [
 
 		"sci_ipoptfminbnd.cpp",
 		"sci_minbndNLP.cpp",
+
+		"sci_ipoptfmincon.cpp",
+		"sci_minconNLP.cpp",
 
         //CLP
         "sci_LinProg.cpp",

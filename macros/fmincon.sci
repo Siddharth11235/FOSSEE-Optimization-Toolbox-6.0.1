@@ -850,7 +850,7 @@ function [xopt,fopt,exitflag,output,lambda,gradient,hessian] = fmincon (varargin
    	empty=[0];
 
    	//Calling the Ipopt function for solving the above problem
-    [xopt,fopt,status,iter,cpu,obj_eval,dual,lambda1,zl,zu,gradient,hessian1] = solveminconp(f,A,b,Aeq,beq,lb,ub,no_nlc,no_nlic,addnlc1,fGrad1,lHess1,addcGrad1,x0,options,empty)	
+    [xopt,fopt,status,iter,cpu,obj_eval,dual,lambda1,zl,zu,gradient,hessian1] = solveminconp("f",A,b,Aeq,beq,lb,ub,no_nlc,no_nlic,"addnlc1","fGrad1","lHess1","addcGrad1",x0,options,empty)	
    
 	//Calculating the values for the output   	
    	xopt = xopt';
