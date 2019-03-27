@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<scilablib name="FOSSEE_Optimization_Toolboxlib">
+  <macro name="Checkdims" file="Checkdims.bin" md5="c841a68e738d27758410271285fbf645"/>
+  <macro name="Checklhs" file="Checklhs.bin" md5="fce0fe3475e95c93e08de1204fbb6337"/>
+  <macro name="Checkrhs" file="Checkrhs.bin" md5="47efbe72d588ecb2f7f1ef8eaeb32882"/>
+  <macro name="Checktype" file="Checktype.bin" md5="5ac16d656be0e05e478eb53011d5d378"/>
+  <macro name="Checkvector" file="Checkvector.bin" md5="75f5fdcf9e0f4720f2d8e18db3590d43"/>
+  <macro name="cbcmatrixintlinprog" file="cbcmatrixintlinprog.bin" md5="38b28820d64ab860e2f4156fd0c2913b"/>
+  <macro name="cbcmpsintlinprog" file="cbcmpsintlinprog.bin" md5="4133d365bdcfb2f41c7ebd8d0828a63a"/>
+  <macro name="fminbnd" file="fminbnd.bin" md5="47faa9a8c9c19dbd34bc6b186a5801b9"/>
+  <macro name="fmincon" file="fmincon.bin" md5="754daa429e0e47332c8b9e3da6d25915"/>
+  <macro name="fminunc" file="fminunc.bin" md5="1570554ae6cd5511eab05eeac4b0eb25"/>
+  <macro name="intlinprog" file="intlinprog.bin" md5="9a919017b2a1d5402041925e0da5e72d"/>
+  <macro name="intquadprog" file="intquadprog.bin" md5="893c95b45a50483a3bbd60b830f47575"/>
+  <macro name="linprog" file="linprog.bin" md5="5979d8f7731b807f8cadf9fefe5c80b3"/>
+  <macro name="matrix_linprog" file="matrix_linprog.bin" md5="51a7bdb035e8d61c810e906dba02d2eb"/>
+  <macro name="mps_linprog" file="mps_linprog.bin" md5="2890044b21b566b41d3f61054d517f70"/>
+  <macro name="quadprog" file="quadprog.bin" md5="3b7de70d8a5f23b21ebe8e087a9abca5"/>
+  <macro name="quadprogmat" file="quadprogmat.bin" md5="e93f58e06520316d8c5ffaa9e9c85080"/>
+</scilablib>

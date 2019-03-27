@@ -39,7 +39,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
 	double* ub= NULL;
 	//options for maximum iterations and writing mps
 	double* options= NULL;
-	int nIters = 0;
+	double nIters = 3000;
 	//Flag for Mps
 	//double flagMps= NULL;
 	//Number of rows and columns in objective function
@@ -158,7 +158,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
     }
 	in2 = scilab_getListItem( env, in[8], 1);
 
-	scilab_getInteger32(env, in2, &nIters);
+	scilab_getDouble(env, in2, &nIters);
 
 
 
@@ -178,7 +178,7 @@ int sci_linearprog(scilabEnv env, int nin, scilabVar* in, int nopt, scilabOpt op
         matrix->appendRow(row);
    	}
 	//setting options for maximum iterations
-    si->setIntParam(OsiMaxNumIteration,nIters);
+    si->setIntParam(OsiMaxNumIteration,(int)nIters);
 
     //Load the problem to OSI
     si->loadProblem(*matrix , lb , ub, obj , conLB , conUB);
